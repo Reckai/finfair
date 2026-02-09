@@ -1,0 +1,38 @@
+{
+  "expo": {
+    "name": "FinFair",
+    "slug": "finfair-app",
+    "scheme": "finfair",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/splash-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#6366F1"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.finfair.app"
+    },
+    "android": {
+      "package": "com.finfair.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "edgeToEdgeEnabled": true,
+      "predictiveBackGestureEnabled": false
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-web-browser",
+      "expo-secure-store"
+    ]
+  }
+}
