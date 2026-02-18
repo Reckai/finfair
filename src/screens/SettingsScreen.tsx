@@ -4,7 +4,7 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
+  Pressable,
   KeyboardAvoidingView,
   Platform,
   Alert,
@@ -17,6 +17,8 @@ import * as Clipboard from 'expo-clipboard';
 import { colors } from '../constants/colors';
 import { useAppStore } from '../store/useAppStore';
 import { pairsApi } from '../services/pairs';
+
+
 
 export const SettingsScreen: React.FC = () => {
   const pairId = useAppStore((s) => s.pairId);
@@ -155,18 +157,18 @@ export const SettingsScreen: React.FC = () => {
                 </Text>
                 <Text style={styles.codeDisplay}>{inviteCode}</Text>
                 <View style={styles.codeActions}>
-                  <TouchableOpacity
+                  <Pressable
                     style={styles.codeButton}
                     onPress={handleCopyCode}
                   >
                     <Text style={styles.codeButtonText}>Скопировать</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
+                  </Pressable>
+                  <Pressable
                     style={[styles.codeButton, styles.shareButton]}
                     onPress={handleShareCode}
                   >
                     <Text style={styles.codeButtonText}>Поделиться</Text>
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               </View>
             )}
@@ -184,7 +186,7 @@ export const SettingsScreen: React.FC = () => {
                 placeholder="Введите имя"
                 placeholderTextColor={colors.textMuted}
               />
-              <TouchableOpacity
+              <Pressable
                 style={[
                   styles.saveButton,
                   !name.trim() && styles.saveButtonDisabled,
@@ -195,11 +197,11 @@ export const SettingsScreen: React.FC = () => {
                 <Text style={styles.saveButtonText}>
                   {saved ? 'Сохранено!' : 'Сохранить'}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
 
             {/* Leave pair */}
-            <TouchableOpacity
+            <Pressable
               style={styles.dangerButton}
               onPress={handleLeavePair}
               disabled={loading}
@@ -209,7 +211,7 @@ export const SettingsScreen: React.FC = () => {
               ) : (
                 <Text style={styles.dangerButtonText}>Выйти из пары</Text>
               )}
-            </TouchableOpacity>
+            </Pressable>
           </>
         ) : (
           <>
@@ -219,7 +221,7 @@ export const SettingsScreen: React.FC = () => {
               <Text style={styles.sectionDescription}>
                 Создайте пару и отправьте код приглашения партнёру
               </Text>
-              <TouchableOpacity
+              <Pressable
                 style={styles.primaryButton}
                 onPress={handleCreatePair}
                 disabled={loading}
@@ -229,7 +231,7 @@ export const SettingsScreen: React.FC = () => {
                 ) : (
                   <Text style={styles.primaryButtonText}>Создать пару</Text>
                 )}
-              </TouchableOpacity>
+              </Pressable>
             </View>
 
             {/* Invite code display (after creation) */}
@@ -238,18 +240,18 @@ export const SettingsScreen: React.FC = () => {
                 <Text style={styles.sectionTitle}>Код приглашения</Text>
                 <Text style={styles.codeDisplay}>{inviteCode}</Text>
                 <View style={styles.codeActions}>
-                  <TouchableOpacity
+                  <Pressable
                     style={styles.codeButton}
                     onPress={handleCopyCode}
                   >
                     <Text style={styles.codeButtonText}>Скопировать</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
+                  </Pressable>
+                  <Pressable
                     style={[styles.codeButton, styles.shareButton]}
                     onPress={handleShareCode}
                   >
                     <Text style={styles.codeButtonText}>Поделиться</Text>
-                  </TouchableOpacity>
+                  </Pressable>
                 </View>
               </View>
             )}
@@ -272,10 +274,10 @@ export const SettingsScreen: React.FC = () => {
                 autoCapitalize="none"
                 autoCorrect={false}
               />
-              <TouchableOpacity
+              <Pressable
                 style={[
                   styles.primaryButton,
-                  { marginTop: 12 },
+                  styles.settingButton,
                   joinCode.length !== 8 && styles.saveButtonDisabled,
                 ]}
                 onPress={handleJoinPair}
@@ -286,7 +288,7 @@ export const SettingsScreen: React.FC = () => {
                 ) : (
                   <Text style={styles.primaryButtonText}>Присоединиться</Text>
                 )}
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </>
         )}
@@ -333,6 +335,9 @@ const styles = StyleSheet.create({
     color: colors.textPrimary,
     borderWidth: 1,
     borderColor: colors.border,
+  },
+  settingButton:{
+     marginTop: 12,
   },
   pairedBanner: {
     flexDirection: 'row',

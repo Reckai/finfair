@@ -4,21 +4,26 @@ import {
   Text,
   StyleSheet,
   TextInput,
-  TouchableOpacity,
+
   KeyboardAvoidingView,
   Platform,
   ScrollView,
   Alert,
+  Pressable,
 } from 'react-native';
 
 import { colors } from '../constants/colors';
 import { CategoryGrid } from '../components/CategoryGrid';
 import { SplitModeToggle } from '../components/OwnerToggle';
-import { SplitMode } from '../types';
+import { MainTabParamList, SplitMode } from '../types';
 import { useAppStore } from '../store/useAppStore';
 import { transactionsApi } from '../services/transactions';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
-export const AddTransactionScreen: React.FC = () => {
+type Props = BottomTabScreenProps<MainTabParamList, 'AddTransaction'>;
+
+
+export const AddTransactionScreen: React.FC<Props> = () => {
   const [amount, setAmount] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [description, setDescription] = useState('');
@@ -131,7 +136,7 @@ export const AddTransactionScreen: React.FC = () => {
           />
         </View>
 
-        <TouchableOpacity
+        <Pressable
           style={[
             styles.submitButton,
             (!amount || !selectedCategory || isSubmitting) && styles.submitButtonDisabled,
@@ -142,7 +147,7 @@ export const AddTransactionScreen: React.FC = () => {
           <Text style={styles.submitButtonText}>
             {isSubmitting ? 'Добавление...' : 'Добавить'}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       </ScrollView>
     </KeyboardAvoidingView>
   );

@@ -70,13 +70,6 @@ export interface BalanceState {
   totalPaid: number;
 }
 
-// Auth types
-export interface AuthState {
-  user: User | null;
-  token: string | null;
-  isAuthenticated: boolean;
-  isLoading: boolean;
-}
 
 // API Response types
 export interface ApiResponse<T> {
@@ -87,9 +80,9 @@ export interface ApiResponse<T> {
 
 // Navigation types
 export type RootStackParamList = {
-  Auth: undefined;
-  Main: undefined;
-};
+        Auth: {token?:string};
+        Main: undefined;
+      };
 
 export type MainTabParamList = {
   Dashboard: undefined;
@@ -97,3 +90,8 @@ export type MainTabParamList = {
   History: undefined;
   Settings: undefined;
 };
+ declare global {
+    namespace ReactNavigation {
+      interface RootParamList extends RootStackParamList {}
+    }
+  }

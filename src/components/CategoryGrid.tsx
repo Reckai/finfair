@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { resolveIconName } from '../constants/categories';
+import React, { useCallback } from 'react';
+import { View, StyleSheet } from 'react-native';
+
 import { colors } from '../constants/colors';
 import { useAppStore } from '../store/useAppStore';
+import { CategoryItem } from './CategoryItem';
 
 interface CategoryGridProps {
   selectedCategory: number | null;
@@ -15,44 +15,15 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
   onSelectCategory,
 }) => {
   const categories = useAppStore((s) => s.categories);
-
+  const handleSelectCategory = useCallback((categoryId: number) => {
+    onSelectCategory(categoryId);
+  }, [onSelectCategory]);
   return (
     <View style={styles.container}>
       {categories.map((category) => {
         const isSelected = selectedCategory === category.id;
-        const iconName = resolveIconName(category.iconName);
         return (
-          <TouchableOpacity
-            key={category.id}
-            style={[
-              styles.categoryItem,
-              isSelected && styles.categoryItemSelected,
-            ]}
-            onPress={() => onSelectCategory(category.id)}
-          >
-            <View
-              style={[
-                styles.iconContainer,
-                { backgroundColor: category.color + '20' },
-                isSelected && { backgroundColor: category.color },
-              ]}
-            >
-              <Ionicons
-                name={iconName as keyof typeof Ionicons.glyphMap}
-                size={24}
-                color={isSelected ? '#FFFFFF' : category.color}
-              />
-            </View>
-            <Text
-              style={[
-                styles.categoryName,
-                isSelected && styles.categoryNameSelected,
-              ]}
-              numberOfLines={1}
-            >
-              {category.name}
-            </Text>
-          </TouchableOpacity>
+         <CategoryItem key={category.id} category={category} isSelected={isSelected} onPress={handleSelectCategory} />
         );
       })}
     </View>
@@ -76,14 +47,6 @@ const styles = StyleSheet.create({
   },
   categoryItemSelected: {
     borderColor: colors.primary,
-  },
-  iconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 24,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginBottom: 8,
   },
   categoryName: {
     fontSize: 12,

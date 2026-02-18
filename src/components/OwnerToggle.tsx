@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { colors } from '../constants/colors';
 import { SplitMode } from '../types';
 
@@ -23,7 +23,7 @@ export const SplitModeToggle: React.FC<SplitModeToggleProps> = ({
   return (
     <View style={styles.container}>
       {options.map((option) => (
-        <TouchableOpacity
+        <Pressable
           key={option.key}
           style={[
             styles.option,
@@ -39,7 +39,7 @@ export const SplitModeToggle: React.FC<SplitModeToggleProps> = ({
           >
             {option.label}
           </Text>
-        </TouchableOpacity>
+        </Pressable>
       ))}
     </View>
   );

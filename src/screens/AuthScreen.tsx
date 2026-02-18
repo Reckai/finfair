@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, TextInput, Alert, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { View, Text, StyleSheet,  TextInput, Alert, KeyboardAvoidingView, ScrollView, Platform, Pressable } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
 import { authService } from '../services/auth';
 import { useAppStore } from '../store/useAppStore';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { RootStackParamList } from '../types';
 
-export const AuthScreen: React.FC = () => {
+type Props = NativeStackScreenProps<RootStackParamList, 'Auth'>;
+
+export const AuthScreen: React.FC<Props> = ({ route }) => {
   const setUser = useAppStore((s) => s.setUser);
+  const token = route.params?.token
   const [manualToken, setManualToken] = useState('');
   const [showManualInput, setShowManualInput] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -59,10 +64,10 @@ export const AuthScreen: React.FC = () => {
             Ведите совместный учёт расходов и следите за балансом между партнёрами
           </Text>
 
-          <TouchableOpacity style={styles.telegramButton} onPress={handleTelegramLogin}>
+          <Pressable style={styles.telegramButton} onPress={handleTelegramLogin}>
             <Ionicons name="paper-plane" size={24} color="#FFFFFF" />
             <Text style={styles.telegramButtonText}>Войти через Telegram</Text>
-          </TouchableOpacity>
+          </Pressable>
 
           {/* Ручной ввод токена из бота */}
           {showManualInput ? (
@@ -75,7 +80,7 @@ export const AuthScreen: React.FC = () => {
                 style={styles.tokenInput}
                 autoCapitalize="none"
               />
-              <TouchableOpacity
+              <Pressable
                 style={styles.loginButton}
                 onPress={handleManualLogin}
                 disabled={loading}
@@ -83,17 +88,17 @@ export const AuthScreen: React.FC = () => {
                 <Text style={styles.loginButtonText}>
                   {loading ? 'Вход...' : 'Войти'}
                 </Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           ) : (
-            <TouchableOpacity
+            <Pressable
               style={styles.manualLink}
               onPress={() => setShowManualInput(true)}
             >
               <Text style={styles.manualLinkText}>
                 Ввести токен вручную
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           )}
         </View>
       </ScrollView>

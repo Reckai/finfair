@@ -1,5 +1,5 @@
 import React from 'react';
-import { NavigationContainer } from '@react-navigation/native';
+import { LinkingOptions, NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Ionicons } from '@expo/vector-icons';
@@ -14,6 +14,27 @@ import { useAppStore } from '../store/useAppStore';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
+
+
+const linking: LinkingOptions<RootStackParamList>={
+  prefixes: ['finfair://'],
+  config:{
+    screens:{
+      Auth: 'auth',
+      Main:{
+       
+        screens:{
+          Dashboard: 'dashboard',
+          AddTransaction: 'add-transaction',
+          History: 'history',
+          Settings: 'settings',
+        }
+      }
+    }
+  }
+}
+
+
 
 const MainTabs: React.FC = () => {
   return (
@@ -81,10 +102,11 @@ const MainTabs: React.FC = () => {
 };
 
 export const AppNavigator: React.FC = () => {
-  const isAuthenticated = useAppStore((s) => s.isAuthenticated);
+  const isAuthenticated = useAppStore((s) => s.user !== null);
 
   return (
-    <NavigationContainer>
+    <NavigationContainer
+      linking={linking}>
       <Stack.Navigator screenOptions={{
           headerShown: true,
           headerStyle: { backgroundColor: '#FFFFFF' },

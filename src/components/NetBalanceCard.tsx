@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text,  StyleSheet, Pressable } from 'react-native';
 import { colors } from '../constants/colors';
 import { formatCurrency } from '../utils/formatters';
 
@@ -40,9 +40,9 @@ export const NetBalanceCard: React.FC<NetBalanceCardProps> = ({
         </Text>
       </View>
       {!isZero && showSettlementButton && (
-        <TouchableOpacity style={styles.settleButton} onPress={onSettleUp}>
+        <Pressable style={styles.settleButton} onPress={onSettleUp}>
           <Text style={styles.settleButtonText}>Рассчитаться</Text>
-        </TouchableOpacity>
+        </Pressable>
       )}
     </View>
   );

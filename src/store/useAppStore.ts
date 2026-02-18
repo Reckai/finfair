@@ -7,7 +7,6 @@ import { fallbackCategories } from '../constants/categories';
 interface AppState {
   // State
   user: User | null;
-  isAuthenticated: boolean;
   isLoading: boolean;
   transactions: Transaction[];
   settlements: Settlement[];
@@ -15,8 +14,6 @@ interface AppState {
   settings: AppSettings;
   pairId: string | null;
 
-  // Computed value (getter)
-  getBalance: () => BalanceState;
 
   // Actions
   setUser: (user: User | null) => void;
@@ -36,7 +33,6 @@ interface AppState {
 // --- Initial state ---
 const initialState = {
   user: null as User | null,
-  isAuthenticated: false,
   isLoading: true,
   transactions: [] as Transaction[],
   settlements: [] as Settlement[],
@@ -51,13 +47,10 @@ const initialState = {
 export const useAppStore = create<AppState>((set, get) => ({
   ...initialState,
 
-  getBalance: () => {
-    const { transactions, settlements, user } = get();
-    return calculateBalance(transactions, settlements, user?.id || '');
-  },
+ 
   
   setUser: (user) =>
-    set({ user, isAuthenticated: !!user }),
+    set({ user }),
 
   setLoading: (isLoading) =>
     set({ isLoading }),
@@ -98,6 +91,6 @@ export const useAppStore = create<AppState>((set, get) => ({
   setPairId: (pairId) =>
     set({ pairId }),
 
-  logout: () =>
-    set(initialState),
+  logout: 
+    () => set({ ...initialState, isLoading: false }),
 }));

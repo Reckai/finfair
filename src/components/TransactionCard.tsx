@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { Transaction } from '../types';
@@ -11,20 +11,23 @@ interface TransactionCardProps {
   transaction: Transaction;
 }
 
-export const TransactionCard: React.FC<TransactionCardProps> = ({
+export const TransactionCard: React.FC<TransactionCardProps> = React.memo(({
   transaction,
 }) => {
   const storeCategories = useAppStore((s) => s.categories);
   const category = transaction.category || getCategoryById(transaction.categoryId, storeCategories);
   const iconName = category ? resolveIconName(category.iconName) : 'help-circle';
 
+  const iconContainerDynamicStyle  = useMemo(()=>[
+  styles.iconContainer,
+  { backgroundColor: (category?.color || colors.textMuted) + '20' },   
+  ],[category?.color, colors.textMuted])
+
+
   return (
     <View style={styles.container}>
       <View
-        style={[
-          styles.iconContainer,
-          { backgroundColor: (category?.color || colors.textMuted) + '20' },
-        ]}
+        style={iconContainerDynamicStyle}
       >
         <Ionicons
           name={iconName as keyof typeof Ionicons.glyphMap}
@@ -48,7 +51,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = ({
       <Text style={styles.amount}>-{formatCurrency(transaction.amount)}</Text>
     </View>
   );
-};
+});
 
 const styles = StyleSheet.create({
   container: {

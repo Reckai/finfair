@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+  import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { colors } from '../constants/colors';
 import { TransactionCard } from '../components/TransactionCard';
 import { TrueSpendCard } from '../components/TrueSpendCard';
@@ -11,8 +12,10 @@ import { dashboardApi } from '../services/dashboard';
 import { settlementsApi } from '../services/settlements';
 import { apiToTransaction } from '../utils/transactionAdapter';
 import { ApiDashboardStats } from '../types/api';
+ import { MainTabParamList } from '../types';
+type Props = BottomTabScreenProps<MainTabParamList, 'Dashboard'>;
 
-export const DashboardScreen: React.FC = () => {
+export const DashboardScreen: React.FC<Props> = () => {
   const insets = useSafeAreaInsets();
   const [settleModalVisible, setSettleModalVisible] = useState(false);
   const [refreshing, setRefreshing] = useState(false);
@@ -26,7 +29,6 @@ export const DashboardScreen: React.FC = () => {
       setStats(data);
     }
   }, []);
-  console.log(stats)
   useEffect(() => {
     loadData();
   }, [loadData]);
@@ -55,6 +57,8 @@ export const DashboardScreen: React.FC = () => {
       await loadData();
     }
   };
+
+  const handleCloseSettleModal = useCallback(() => setSettleModalVisible(false), []);
 
   const balance = stats?.balance ?? { netBalance: 0, trueSpend: 0, partnerSpend: 0, totalPaid: 0 };
   const categoryBreakdown = stats?.categoryBreakdown ?? [];
@@ -95,14 +99,14 @@ export const DashboardScreen: React.FC = () => {
           <Text style={styles.sectionTitle}>Останні операції</Text>
           {recentTransactions.map((transaction) => (
             <TransactionCard key={transaction.id} transaction={transaction} />
-          ))}
+          )).slice(0, 5)}
         </View>
       </ScrollView>
 
       <SettleUpModal
         visible={settleModalVisible}
         currentBalance={balance.netBalance}
-        onClose={() => setSettleModalVisible(false)}
+        onClose={handleCloseSettleModal}
         onSettle={handleSettle}
       />
     </>

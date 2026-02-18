@@ -27,11 +27,5 @@ export const settlementsApi = {
     return res.success;
   },
 
-  async getBalance(): Promise<ApiBalanceResponse | null> {
-    const res = await api.get<{ balance: ApiBalanceResponse }>('/settlements/balance');
-    if (res.success && res.data) {
-      return res.data.balance;
-    }
-    return null;
-  },
+
 };

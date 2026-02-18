@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 import { Ionicons } from '@expo/vector-icons';
@@ -7,6 +7,7 @@ import { resolveIconName, getCategoryById } from '../constants/categories';
 import { formatCurrency } from '../utils/formatters';
 import { CategorySpend } from '../utils/categoryCalculator';
 import { useAppStore } from '../store/useAppStore';
+import { TrueSpendCardCategoryCard } from './TrueSpendCardCategoryCard';
 
 interface TrueSpendCardProps {
   trueSpend: number;
@@ -23,7 +24,7 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
 }) => {
   const storeCategories = useAppStore((s) => s.categories);
 
-  // Prepare chart data with category colors
+ 
   const chartData = categoryBreakdown.map((item) => {
     const category = getCategoryById(item.categoryId, storeCategories);
     return {
@@ -32,12 +33,16 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
     };
   });
 
-  // Ensure we have data for the chart
   const hasData = chartData.length > 0 && trueSpend > 0;
+  const centralLabel = useCallback(() => (
+    <View style={styles.centerLabel}>
+      <Text style={styles.centerAmount}>{formatCurrency(trueSpend)}</Text>
+      <Text style={styles.centerText}>ваші витрати</Text>
+    </View>
+  ), [trueSpend]);
 
   return (
     <View style={styles.container}>
-      {/* Header */}
       <View style={styles.header}>
         <View style={styles.headerLeft}>
           <View style={styles.headerIcon}>
@@ -50,7 +55,6 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
         </View>
       </View>
 
-      {/* Chart Section */}
       <View style={styles.chartSection}>
         <View style={styles.sectionHeader}>
           <Text style={styles.sectionTitle}>Справжні витрати</Text>
@@ -63,12 +67,7 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
               donut
               radius={100}
               innerRadius={70}
-              centerLabelComponent={() => (
-                <View style={styles.centerLabel}>
-                  <Text style={styles.centerAmount}>{formatCurrency(trueSpend)}</Text>
-                  <Text style={styles.centerText}>ваші витрати</Text>
-                </View>
-              )}
+              centerLabelComponent={centralLabel}
             />
           ) : (
             <View style={styles.emptyChart}>
@@ -81,7 +80,6 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
         </View>
       </View>
 
-      {/* Info Bar */}
       <View style={styles.infoBar}>
         <Text style={styles.infoText}>
           З картки витрачено <Text style={styles.infoHighlight}>{formatCurrency(totalFromCard)}</Text>
@@ -91,7 +89,7 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
         </Text>
       </View>
 
-      {/* Categories Grid */}
+     
       {categoryBreakdown.length > 0 && (
         <View style={styles.categoriesGrid}>
           {categoryBreakdown.map((item) => {
@@ -100,16 +98,7 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
             const iconName = resolveIconName(category.iconName);
 
             return (
-              <View key={item.categoryId} style={styles.categoryItem}>
-                <View style={[styles.categoryIcon, { backgroundColor: category.color + '20' }]}>
-                  <Ionicons
-                    name={iconName as keyof typeof Ionicons.glyphMap}
-                    size={18}
-                    color={category.color}
-                  />
-                </View>
-                <Text style={styles.categoryAmount}>{formatCurrency(item.amount)}</Text>
-              </View>
+             <TrueSpendCardCategoryCard iconName={iconName} color={category.color} amount={item.amount} />
             );
           })}
         </View>
@@ -240,22 +229,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
   },
-  categoryItem: {
-    width: '47%',
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 12,
-  },
-  categoryIcon: {
-    width: 36,
-    height: 36,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  categoryAmount: {
-    color: colors.textPrimary,
-    fontSize: 16,
-    fontWeight: '600',
-  },
+ 
+
 });

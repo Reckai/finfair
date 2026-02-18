@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
   Modal,
-  TouchableOpacity,
+  
   TextInput,
   StyleSheet,
+  Pressable,
 } from 'react-native';
 import { colors } from '../constants/colors';
 import { formatCurrency } from '../utils/formatters';
@@ -25,6 +26,12 @@ export const SettleUpModal: React.FC<SettleUpModalProps> = ({
 }) => {
   const [amount, setAmount] = useState(Math.abs(currentBalance).toString());
   const isOwed = currentBalance > 0;
+  
+ useEffect(() => {
+    if (visible) {
+      setAmount(Math.abs(currentBalance).toString());
+    }
+  }, [visible, currentBalance]);
 
   const handleSettle = () => {
     const settleAmount = parseFloat(amount);
@@ -70,17 +77,17 @@ export const SettleUpModal: React.FC<SettleUpModalProps> = ({
           </View>
 
           <View style={styles.buttons}>
-            <TouchableOpacity style={styles.fullButton} onPress={handleSettleFull}>
+            <Pressable style={styles.fullButton} onPress={handleSettleFull}>
               <Text style={styles.fullButtonText}>Погасить полностью</Text>
-            </TouchableOpacity>
+            </Pressable>
 
             <View style={styles.buttonRow}>
-              <TouchableOpacity style={styles.cancelButton} onPress={onClose}>
+              <Pressable style={styles.cancelButton} onPress={onClose}>
                 <Text style={styles.cancelButtonText}>Отмена</Text>
-              </TouchableOpacity>
-              <TouchableOpacity style={styles.confirmButton} onPress={handleSettle}>
+              </Pressable>
+              <Pressable style={styles.confirmButton} onPress={handleSettle}>
                 <Text style={styles.confirmButtonText}>Подтвердить</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </View>
         </View>

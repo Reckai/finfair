@@ -16,10 +16,9 @@ export const authService = {
   async loginWithTelegram(): Promise<void> {
     const startParam = 'auth';
 
-    // Используем HTTPS формат - он надежнее передает параметры
-    const telegramUrl = `https://t.me/ParallelAccs_bot?start=${startParam}`;
+ 
 
-    await Linking.openURL(telegramUrl);
+    await Linking.openURL(`${TELEGRAM_BOT_URL}?start=${startParam}`);
   },
 
   /**
