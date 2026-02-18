@@ -1,7 +1,5 @@
 import { api } from './api';
-import { ApiSettlement, CreateSettlementPayload, ApiBalanceResponse 
-  
-} from '../types/api';
+import { ApiSettlement, CreateSettlementPayload, ApiBalanceResponse } from '../types/api';
 import { Settlement } from '../types';
 import { apiToSettlement } from '../utils/settlementAdapter';
 
@@ -26,6 +24,4 @@ export const settlementsApi = {
     const res = await api.delete(`/settlements/${id}`);
     return res.success;
   },
-
-
 };

@@ -15,15 +15,23 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
   onSelectCategory,
 }) => {
   const categories = useAppStore((s) => s.categories);
-  const handleSelectCategory = useCallback((categoryId: number) => {
-    onSelectCategory(categoryId);
-  }, [onSelectCategory]);
+  const handleSelectCategory = useCallback(
+    (categoryId: number) => {
+      onSelectCategory(categoryId);
+    },
+    [onSelectCategory],
+  );
   return (
     <View style={styles.container}>
       {categories.map((category) => {
         const isSelected = selectedCategory === category.id;
         return (
-         <CategoryItem key={category.id} category={category} isSelected={isSelected} onPress={handleSelectCategory} />
+          <CategoryItem
+            key={category.id}
+            category={category}
+            isSelected={isSelected}
+            onPress={handleSelectCategory}
+          />
         );
       })}
     </View>

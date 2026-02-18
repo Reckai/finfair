@@ -12,13 +12,9 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 type FilterType = 'all' | 'debt';
 type Props = BottomTabScreenProps<MainTabParamList, 'History'>;
 
-
-
 const isDebtTransaction = (tx: Transaction): boolean => {
   return tx.splitMode === 'HALF' || tx.splitMode === 'PARTNER';
 };
-
-
 
 export const HistoryScreen: React.FC<Props> = () => {
   const [filter, setFilter] = useState<FilterType>('all');
@@ -30,11 +26,9 @@ export const HistoryScreen: React.FC<Props> = () => {
   const setTransactions = useAppStore((s) => s.setTransactions);
 
   const currentUserId = user?.id || '';
-  
+
   const loadTransactions = useCallback(async () => {
-    const data = pairId
-      ? await transactionsApi.getAllPair()
-      : await transactionsApi.getAll();
+    const data = pairId ? await transactionsApi.getAllPair() : await transactionsApi.getAll();
     setTransactions(data);
   }, [pairId, setTransactions]);
 
@@ -47,44 +41,47 @@ export const HistoryScreen: React.FC<Props> = () => {
     await loadTransactions();
     setRefreshing(false);
   }, [loadTransactions]);
-  
-  const handleFilterAll = useCallback(()=>setFilter('all'),[]);
-  const handleFilterDebt = useCallback(()=>setFilter('debt'),[]);
 
-  const filteredTransactions = filter === 'all'
-    ? transactions
-    : transactions.filter(isDebtTransaction);
+  const handleFilterAll = useCallback(() => setFilter('all'), []);
+  const handleFilterDebt = useCallback(() => setFilter('debt'), []);
 
-  const getSplitLabel =  useCallback((tx: Transaction): string | null => {
-    if (tx.splitMode === 'PARTNER') {
-      return tx.userId === currentUserId ? 'Подарок' : 'Мне оплатили';
-    }
-    if (tx.splitMode === 'HALF') {
-      return 'Пополам';
-    }
-    return null;
-  }, [currentUserId]);
+  const filteredTransactions =
+    filter === 'all' ? transactions : transactions.filter(isDebtTransaction);
 
-  const renderItem = useCallback(({ item }: { item: Transaction }) => {
-    const label = getSplitLabel(item);
-    return (
-      <View style={label ? styles.debtTransactionWrapper : undefined}>
-        <TransactionCard transaction={item} />
-        {label && (
-          <View style={styles.debtIndicator}>
-            <Text style={styles.debtIndicatorText}>{label}</Text>
-          </View>
-        )}
-      </View>
-    );
-  }, [getSplitLabel]);
+  const getSplitLabel = useCallback(
+    (tx: Transaction): string | null => {
+      if (tx.splitMode === 'PARTNER') {
+        return tx.userId === currentUserId ? 'Подарок' : 'Мне оплатили';
+      }
+      if (tx.splitMode === 'HALF') {
+        return 'Пополам';
+      }
+      return null;
+    },
+    [currentUserId],
+  );
+
+  const renderItem = useCallback(
+    ({ item }: { item: Transaction }) => {
+      const label = getSplitLabel(item);
+      return (
+        <View style={label ? styles.debtTransactionWrapper : undefined}>
+          <TransactionCard transaction={item} />
+          {label && (
+            <View style={styles.debtIndicator}>
+              <Text style={styles.debtIndicatorText}>{label}</Text>
+            </View>
+          )}
+        </View>
+      );
+    },
+    [getSplitLabel],
+  );
 
   const renderEmpty = () => (
     <View style={styles.emptyContainer}>
       <Text style={styles.emptyText}>Нет транзакций</Text>
-      <Text style={styles.emptySubtext}>
-        Добавьте первый расход, чтобы начать учёт
-      </Text>
+      <Text style={styles.emptySubtext}>Добавьте первый расход, чтобы начать учёт</Text>
     </View>
   );
 
@@ -95,9 +92,7 @@ export const HistoryScreen: React.FC<Props> = () => {
           style={[styles.filterButton, filter === 'all' && styles.filterButtonActive]}
           onPress={handleFilterAll}
         >
-          <Text style={[styles.filterText, filter === 'all' && styles.filterTextActive]}>
-            Все
-          </Text>
+          <Text style={[styles.filterText, filter === 'all' && styles.filterTextActive]}>Все</Text>
         </Pressable>
         <Pressable
           style={[styles.filterButton, filter === 'debt' && styles.filterButtonActive]}
@@ -116,9 +111,7 @@ export const HistoryScreen: React.FC<Props> = () => {
         contentContainerStyle={styles.list}
         ListEmptyComponent={renderEmpty}
         showsVerticalScrollIndicator={false}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       />
     </View>
   );

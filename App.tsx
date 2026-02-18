@@ -10,15 +10,15 @@ import { categoriesApi } from './src/services/categories';
 import { useShallow } from 'zustand/react/shallow';
 
 export default function App() {
-
-const { setUser, setLoading, setPairId, setCategories } = useAppStore(
-  useShallow((s) => ({
-    setUser: s.setUser,
-    setLoading: s.setLoading,
-    setPairId: s.setPairId,
-    setCategories: s.setCategories,
-  }))
-);
+  const { setUser, setLoading, setPairId, setCategories, isLoading } = useAppStore(
+    useShallow((s) => ({
+      setUser: s.setUser,
+      setLoading: s.setLoading,
+      setPairId: s.setPairId,
+      setCategories: s.setCategories,
+      isLoading: s.isLoading,
+    })),
+  );
   useEffect(() => {
     const checkAuth = async () => {
       try {
@@ -49,8 +49,6 @@ const { setUser, setLoading, setPairId, setCategories } = useAppStore(
     };
     checkAuth();
   }, []);
-
-  
 
   if (isLoading) {
     return <SplashScreen />;

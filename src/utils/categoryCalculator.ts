@@ -11,7 +11,7 @@ export interface CategorySpend {
  */
 export function calculateCategoryBreakdown(
   transactions: Transaction[],
-  currentUserId: string
+  currentUserId: string,
 ): CategorySpend[] {
   const categoryMap = new Map<number, number>();
 

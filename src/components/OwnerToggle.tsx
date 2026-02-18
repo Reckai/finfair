@@ -25,18 +25,10 @@ export const SplitModeToggle: React.FC<SplitModeToggleProps> = ({
       {options.map((option) => (
         <Pressable
           key={option.key}
-          style={[
-            styles.option,
-            value === option.key && styles.optionSelected,
-          ]}
+          style={[styles.option, value === option.key && styles.optionSelected]}
           onPress={() => onChange(option.key)}
         >
-          <Text
-            style={[
-              styles.optionText,
-              value === option.key && styles.optionTextSelected,
-            ]}
-          >
+          <Text style={[styles.optionText, value === option.key && styles.optionTextSelected]}>
             {option.label}
           </Text>
         </Pressable>

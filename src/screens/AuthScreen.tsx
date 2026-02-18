@@ -1,5 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet,  TextInput, Alert, KeyboardAvoidingView, ScrollView, Platform, Pressable } from 'react-native';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TextInput,
+  Alert,
+  KeyboardAvoidingView,
+  ScrollView,
+  Platform,
+  Pressable,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
 import { authService } from '../services/auth';
@@ -11,7 +21,7 @@ type Props = NativeStackScreenProps<RootStackParamList, 'Auth'>;
 
 export const AuthScreen: React.FC<Props> = ({ route }) => {
   const setUser = useAppStore((s) => s.setUser);
-  const token = route.params?.token
+  const token = route.params?.token;
   const [manualToken, setManualToken] = useState('');
   const [showManualInput, setShowManualInput] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -46,11 +56,11 @@ export const AuthScreen: React.FC<Props> = ({ route }) => {
   };
 
   return (
-    <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
-      <ScrollView
-        contentContainerStyle={styles.scrollContent}
-        keyboardShouldPersistTaps="handled"
-      >
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
+      <ScrollView contentContainerStyle={styles.scrollContent} keyboardShouldPersistTaps="handled">
         <View style={styles.logoContainer}>
           <View style={styles.logoCircle}>
             <Ionicons name="wallet" size={48} color={colors.primary} />
@@ -80,24 +90,13 @@ export const AuthScreen: React.FC<Props> = ({ route }) => {
                 style={styles.tokenInput}
                 autoCapitalize="none"
               />
-              <Pressable
-                style={styles.loginButton}
-                onPress={handleManualLogin}
-                disabled={loading}
-              >
-                <Text style={styles.loginButtonText}>
-                  {loading ? 'Вход...' : 'Войти'}
-                </Text>
+              <Pressable style={styles.loginButton} onPress={handleManualLogin} disabled={loading}>
+                <Text style={styles.loginButtonText}>{loading ? 'Вход...' : 'Войти'}</Text>
               </Pressable>
             </View>
           ) : (
-            <Pressable
-              style={styles.manualLink}
-              onPress={() => setShowManualInput(true)}
-            >
-              <Text style={styles.manualLinkText}>
-                Ввести токен вручную
-              </Text>
+            <Pressable style={styles.manualLink} onPress={() => setShowManualInput(true)}>
+              <Text style={styles.manualLinkText}>Ввести токен вручную</Text>
             </Pressable>
           )}
         </View>

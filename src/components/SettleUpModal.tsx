@@ -1,13 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import {
-  View,
-  Text,
-  Modal,
-  
-  TextInput,
-  StyleSheet,
-  Pressable,
-} from 'react-native';
+import { View, Text, Modal, TextInput, StyleSheet, Pressable } from 'react-native';
 import { colors } from '../constants/colors';
 import { formatCurrency } from '../utils/formatters';
 
@@ -26,8 +18,8 @@ export const SettleUpModal: React.FC<SettleUpModalProps> = ({
 }) => {
   const [amount, setAmount] = useState(Math.abs(currentBalance).toString());
   const isOwed = currentBalance > 0;
-  
- useEffect(() => {
+
+  useEffect(() => {
     if (visible) {
       setAmount(Math.abs(currentBalance).toString());
     }
@@ -53,9 +45,7 @@ export const SettleUpModal: React.FC<SettleUpModalProps> = ({
           <Text style={styles.title}>Рассчитаться</Text>
 
           <View style={styles.balanceInfo}>
-            <Text style={styles.balanceLabel}>
-              {isOwed ? 'Тебе должны' : 'Ты должен'}
-            </Text>
+            <Text style={styles.balanceLabel}>{isOwed ? 'Тебе должны' : 'Ты должен'}</Text>
             <Text style={[styles.balanceAmount, isOwed ? styles.positive : styles.negative]}>
               {formatCurrency(Math.abs(currentBalance))}
             </Text>

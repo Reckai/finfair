@@ -6,7 +6,11 @@
     "start": "expo start",
     "android": "expo start --android",
     "ios": "expo start --ios",
-    "web": "expo start --web"
+    "web": "expo start --web",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"src/**/*.{ts,tsx}\" \"App.tsx\" \"index.ts\"",
+    "format:check": "prettier --check \"src/**/*.{ts,tsx}\" \"App.tsx\" \"index.ts\""
   },
   "dependencies": {
     "@react-navigation/bottom-tabs": "^7.12.0",
@@ -32,6 +36,11 @@
   },
   "devDependencies": {
     "@types/react": "~19.1.0",
+    "eslint": "^9.39.2",
+    "eslint-config-expo": "^10.0.0",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-prettier": "^5.5.5",
+    "prettier": "^3.8.1",
     "typescript": "~5.9.2"
   },
   "private": true

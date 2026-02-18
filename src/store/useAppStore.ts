@@ -14,7 +14,6 @@ interface AppState {
   settings: AppSettings;
   pairId: string | null;
 
-
   // Actions
   setUser: (user: User | null) => void;
   setLoading: (isLoading: boolean) => void;
@@ -47,16 +46,11 @@ const initialState = {
 export const useAppStore = create<AppState>((set, get) => ({
   ...initialState,
 
- 
-  
-  setUser: (user) =>
-    set({ user }),
+  setUser: (user) => set({ user }),
 
-  setLoading: (isLoading) =>
-    set({ isLoading }),
+  setLoading: (isLoading) => set({ isLoading }),
 
-  setTransactions: (transactions) =>
-    set({ transactions }),
+  setTransactions: (transactions) => set({ transactions }),
 
   addTransaction: (transaction) =>
     set((state) => ({
@@ -68,8 +62,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       transactions: state.transactions.filter((t) => t.id !== id),
     })),
 
-  setCategories: (categories) =>
-    set({ categories }),
+  setCategories: (categories) => set({ categories }),
 
   addSettlement: (settlement) =>
     set((state) => ({
@@ -88,9 +81,7 @@ export const useAppStore = create<AppState>((set, get) => ({
       settings: { ...state.settings, partnerName: name },
     })),
 
-  setPairId: (pairId) =>
-    set({ pairId }),
+  setPairId: (pairId) => set({ pairId }),
 
-  logout: 
-    () => set({ ...initialState, isLoading: false }),
+  logout: () => set({ ...initialState, isLoading: false }),
 }));

@@ -1,18 +1,18 @@
 import React from 'react';
-import { View, Text,  StyleSheet, Pressable } from 'react-native';
+import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { colors } from '../constants/colors';
 import { formatCurrency } from '../utils/formatters';
 
 interface NetBalanceCardProps {
   balance: number;
   onSettleUp: () => void;
-  showSettlementButton: boolean
+  showSettlementButton: boolean;
 }
 
 export const NetBalanceCard: React.FC<NetBalanceCardProps> = ({
   balance,
   onSettleUp,
-  showSettlementButton
+  showSettlementButton,
 }) => {
   const isPositive = balance > 0;
   const isZero = balance === 0;
@@ -32,9 +32,7 @@ export const NetBalanceCard: React.FC<NetBalanceCardProps> = ({
   return (
     <View style={[styles.container, { backgroundColor: getBackgroundColor() }]}>
       <View style={styles.content}>
-        <Text style={[styles.label, isZero && styles.labelNeutral]}>
-          {getStatusText()}
-        </Text>
+        <Text style={[styles.label, isZero && styles.labelNeutral]}>{getStatusText()}</Text>
         <Text style={[styles.amount, isZero && styles.amountNeutral]}>
           {formatCurrency(Math.abs(balance))}
         </Text>

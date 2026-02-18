@@ -11,24 +11,21 @@ interface TransactionCardProps {
   transaction: Transaction;
 }
 
-export const TransactionCard: React.FC<TransactionCardProps> = React.memo(({
+export const TransactionCard: React.FC<TransactionCardProps> = React.memo(function TransactionCard({
   transaction,
-}) => {
+}) {
   const storeCategories = useAppStore((s) => s.categories);
   const category = transaction.category || getCategoryById(transaction.categoryId, storeCategories);
   const iconName = category ? resolveIconName(category.iconName) : 'help-circle';
 
-  const iconContainerDynamicStyle  = useMemo(()=>[
-  styles.iconContainer,
-  { backgroundColor: (category?.color || colors.textMuted) + '20' },   
-  ],[category?.color, colors.textMuted])
-
+  const iconContainerDynamicStyle = useMemo(
+    () => [styles.iconContainer, { backgroundColor: (category?.color || colors.textMuted) + '20' }],
+    [category?.color, colors.textMuted],
+  );
 
   return (
     <View style={styles.container}>
-      <View
-        style={iconContainerDynamicStyle}
-      >
+      <View style={iconContainerDynamicStyle}>
         <Ionicons
           name={iconName as keyof typeof Ionicons.glyphMap}
           size={24}
@@ -36,17 +33,13 @@ export const TransactionCard: React.FC<TransactionCardProps> = React.memo(({
         />
       </View>
       <View style={styles.content}>
-        <Text style={styles.categoryName}>
-          {category?.name || 'Неизвестно'}
-        </Text>
+        <Text style={styles.categoryName}>{category?.name || 'Неизвестно'}</Text>
         {transaction.description && (
           <Text style={styles.description} numberOfLines={1}>
             {transaction.description}
           </Text>
         )}
-        <Text style={styles.time}>
-          {formatRelativeTime(transaction.createdAt)}
-        </Text>
+        <Text style={styles.time}>{formatRelativeTime(transaction.createdAt)}</Text>
       </View>
       <Text style={styles.amount}>-{formatCurrency(transaction.amount)}</Text>
     </View>

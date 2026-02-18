@@ -4,7 +4,6 @@ import {
   Text,
   StyleSheet,
   TextInput,
-
   KeyboardAvoidingView,
   Platform,
   ScrollView,
@@ -22,7 +21,6 @@ import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 
 type Props = BottomTabScreenProps<MainTabParamList, 'AddTransaction'>;
 
-
 export const AddTransactionScreen: React.FC<Props> = () => {
   const [amount, setAmount] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
@@ -34,7 +32,7 @@ export const AddTransactionScreen: React.FC<Props> = () => {
   const partnerName = useAppStore((s) => s.settings.partnerName);
   const addTransaction = useAppStore((s) => s.addTransaction);
   const pairId = useAppStore((s) => s.pairId);
-   const scrollRef = useRef<ScrollView>(null);
+  const scrollRef = useRef<ScrollView>(null);
 
   const handleScrollUp = () => {
     scrollRef.current?.scrollTo({
@@ -45,8 +43,7 @@ export const AddTransactionScreen: React.FC<Props> = () => {
   const handleSubmit = async () => {
     if (!amount || !selectedCategory || isSubmitting) {
       return;
-    } 
-  
+    }
 
     setIsSubmitting(true);
     try {
@@ -74,7 +71,7 @@ export const AddTransactionScreen: React.FC<Props> = () => {
       Alert.alert('Ошибка', 'Не удалось создать транзакцию');
     } finally {
       setIsSubmitting(false);
-      handleScrollUp()
+      handleScrollUp();
     }
   };
 
@@ -88,7 +85,6 @@ export const AddTransactionScreen: React.FC<Props> = () => {
           <Text style={styles.currencySymbol}>₴</Text>
 
           <View style={styles.inputWrapper}>
-
             {!isFocused && !amount && (
               <Text style={styles.overlayPlaceholder} pointerEvents="none">
                 0
@@ -109,11 +105,7 @@ export const AddTransactionScreen: React.FC<Props> = () => {
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>За кого?</Text>
-          <SplitModeToggle
-            value={splitMode}
-            onChange={setSplitMode}
-            partnerName={partnerName}
-          />
+          <SplitModeToggle value={splitMode} onChange={setSplitMode} partnerName={partnerName} />
         </View>
 
         <View style={styles.section}>
@@ -144,9 +136,7 @@ export const AddTransactionScreen: React.FC<Props> = () => {
           onPress={handleSubmit}
           disabled={!amount || !selectedCategory || isSubmitting}
         >
-          <Text style={styles.submitButtonText}>
-            {isSubmitting ? 'Добавление...' : 'Добавить'}
-          </Text>
+          <Text style={styles.submitButtonText}>{isSubmitting ? 'Добавление...' : 'Добавить'}</Text>
         </Pressable>
       </ScrollView>
     </KeyboardAvoidingView>

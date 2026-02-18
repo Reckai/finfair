@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-  import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { colors } from '../constants/colors';
 import { TransactionCard } from '../components/TransactionCard';
 import { TrueSpendCard } from '../components/TrueSpendCard';
@@ -12,7 +12,7 @@ import { dashboardApi } from '../services/dashboard';
 import { settlementsApi } from '../services/settlements';
 import { apiToTransaction } from '../utils/transactionAdapter';
 import { ApiDashboardStats } from '../types/api';
- import { MainTabParamList } from '../types';
+import { MainTabParamList } from '../types';
 type Props = BottomTabScreenProps<MainTabParamList, 'Dashboard'>;
 
 export const DashboardScreen: React.FC<Props> = () => {
@@ -69,9 +69,7 @@ export const DashboardScreen: React.FC<Props> = () => {
       <ScrollView
         style={styles.container}
         contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
         <View style={styles.header}>
           <Text style={styles.greeting}>Привіт!</Text>
@@ -97,9 +95,11 @@ export const DashboardScreen: React.FC<Props> = () => {
 
         <View style={styles.transactionsSection}>
           <Text style={styles.sectionTitle}>Останні операції</Text>
-          {recentTransactions.map((transaction) => (
-            <TransactionCard key={transaction.id} transaction={transaction} />
-          )).slice(0, 5)}
+          {recentTransactions
+            .map((transaction) => (
+              <TransactionCard key={transaction.id} transaction={transaction} />
+            ))
+            .slice(0, 5)}
         </View>
       </ScrollView>
 

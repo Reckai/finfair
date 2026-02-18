@@ -1,9 +1,9 @@
-import React, { useMemo } from "react";
-import { Category } from "../types";
-import { Pressable, StyleSheet, View, Text } from "react-native";
-import { resolveIconName } from "../constants/categories";
-import { colors } from "../constants/colors";
-import { Ionicons } from "@expo/vector-icons";
+import React, { useMemo } from 'react';
+import { Category } from '../types';
+import { Pressable, StyleSheet, View, Text } from 'react-native';
+import { resolveIconName } from '../constants/categories';
+import { colors } from '../constants/colors';
+import { Ionicons } from '@expo/vector-icons';
 
 export interface CategoryItemProps {
   category: Category;
@@ -11,16 +11,12 @@ export interface CategoryItemProps {
   onPress: (categoryId: number) => void;
 }
 
-export const CategoryItem = ({
-  category,
-  isSelected,
-  onPress,
-}: CategoryItemProps) => {
+export const CategoryItem = ({ category, isSelected, onPress }: CategoryItemProps) => {
   const iconName = resolveIconName(category.iconName);
   const iconContainerDynamicStyle = useMemo(
     () => [
       styles.iconContainer,
-      { backgroundColor: category.color + "20" },
+      { backgroundColor: category.color + '20' },
       isSelected && { backgroundColor: category.color },
     ],
     [styles],
@@ -28,17 +24,14 @@ export const CategoryItem = ({
 
   return (
     <Pressable
-     style={[styles.categoryItem, isSelected && styles.categoryItemSelected]}
+      style={[styles.categoryItem, isSelected && styles.categoryItemSelected]}
       onPress={() => onPress(category.id)}
     >
-      <View
-        style={iconContainerDynamicStyle}
-      
-      >
+      <View style={iconContainerDynamicStyle}>
         <Ionicons
           name={iconName as keyof typeof Ionicons.glyphMap}
           size={24}
-          color={isSelected ? "#FFFFFF" : category.color}
+          color={isSelected ? '#FFFFFF' : category.color}
         />
       </View>
       <Text style={iconContainerDynamicStyle} numberOfLines={1}>
@@ -53,18 +46,18 @@ const styles = StyleSheet.create({
     width: 48,
     height: 48,
     borderRadius: 24,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginBottom: 8,
   },
   categoryItem: {
-    width: "30%",
-    alignItems: "center",
+    width: '30%',
+    alignItems: 'center',
     padding: 12,
     backgroundColor: colors.surface,
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: "transparent",
+    borderColor: 'transparent',
   },
   categoryItemSelected: {
     borderColor: colors.primary,

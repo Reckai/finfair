@@ -15,26 +15,22 @@ import { useAppStore } from '../store/useAppStore';
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
 
-
-const linking: LinkingOptions<RootStackParamList>={
+const linking: LinkingOptions<RootStackParamList> = {
   prefixes: ['finfair://'],
-  config:{
-    screens:{
+  config: {
+    screens: {
       Auth: 'auth',
-      Main:{
-       
-        screens:{
+      Main: {
+        screens: {
           Dashboard: 'dashboard',
           AddTransaction: 'add-transaction',
           History: 'history',
           Settings: 'settings',
-        }
-      }
-    }
-  }
-}
-
-
+        },
+      },
+    },
+  },
+};
 
 const MainTabs: React.FC = () => {
   return (
@@ -105,14 +101,15 @@ export const AppNavigator: React.FC = () => {
   const isAuthenticated = useAppStore((s) => s.user !== null);
 
   return (
-    <NavigationContainer
-      linking={linking}>
-      <Stack.Navigator screenOptions={{
+    <NavigationContainer linking={linking}>
+      <Stack.Navigator
+        screenOptions={{
           headerShown: true,
           headerStyle: { backgroundColor: '#FFFFFF' },
           headerShadowVisible: false,
           headerTitle: '',
-        }}>
+        }}
+      >
         {isAuthenticated ? (
           <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
         ) : (

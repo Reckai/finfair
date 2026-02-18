@@ -2,7 +2,9 @@
   "permissions": {
     "allow": [
       "Bash(test:*)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "Bash(npm run format:*)",
+      "Bash(npm run lint:fix:*)"
     ]
   }
 }

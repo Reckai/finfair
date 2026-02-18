@@ -28,7 +28,10 @@ export function apiToTransaction(apiTx: ApiTransaction): Transaction {
 }
 
 export function transactionToCreatePayload(
-  tx: Pick<Transaction, 'amount' | 'categoryId' | 'splitMode'> & { description?: string; pairId?: string }
+  tx: Pick<Transaction, 'amount' | 'categoryId' | 'splitMode'> & {
+    description?: string;
+    pairId?: string;
+  },
 ): CreateTransactionPayload {
   const payload: CreateTransactionPayload = {
     amount: tx.amount,

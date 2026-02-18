@@ -1,5 +1,12 @@
 // Re-export API types
-export type { ApiTransaction, ApiCategory, CreateTransactionPayload, ApiSettlement, CreateSettlementPayload, ApiBalanceResponse } from './api';
+export type {
+  ApiTransaction,
+  ApiCategory,
+  CreateTransactionPayload,
+  ApiSettlement,
+  CreateSettlementPayload,
+  ApiBalanceResponse,
+} from './api';
 
 // Pair types
 export interface Pair {
@@ -70,7 +77,6 @@ export interface BalanceState {
   totalPaid: number;
 }
 
-
 // API Response types
 export interface ApiResponse<T> {
   success: boolean;
@@ -80,9 +86,9 @@ export interface ApiResponse<T> {
 
 // Navigation types
 export type RootStackParamList = {
-        Auth: {token?:string};
-        Main: undefined;
-      };
+  Auth: { token?: string };
+  Main: undefined;
+};
 
 export type MainTabParamList = {
   Dashboard: undefined;
@@ -90,8 +96,8 @@ export type MainTabParamList = {
   History: undefined;
   Settings: undefined;
 };
- declare global {
-    namespace ReactNavigation {
-      interface RootParamList extends RootStackParamList {}
-    }
+declare global {
+  namespace ReactNavigation {
+    interface RootParamList extends RootStackParamList {}
   }
+}

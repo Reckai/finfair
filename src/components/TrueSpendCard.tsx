@@ -24,7 +24,6 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
 }) => {
   const storeCategories = useAppStore((s) => s.categories);
 
- 
   const chartData = categoryBreakdown.map((item) => {
     const category = getCategoryById(item.categoryId, storeCategories);
     return {
@@ -34,12 +33,15 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
   });
 
   const hasData = chartData.length > 0 && trueSpend > 0;
-  const centralLabel = useCallback(() => (
-    <View style={styles.centerLabel}>
-      <Text style={styles.centerAmount}>{formatCurrency(trueSpend)}</Text>
-      <Text style={styles.centerText}>ваші витрати</Text>
-    </View>
-  ), [trueSpend]);
+  const centralLabel = useCallback(
+    () => (
+      <View style={styles.centerLabel}>
+        <Text style={styles.centerAmount}>{formatCurrency(trueSpend)}</Text>
+        <Text style={styles.centerText}>ваші витрати</Text>
+      </View>
+    ),
+    [trueSpend],
+  );
 
   return (
     <View style={styles.container}>
@@ -82,14 +84,15 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
 
       <View style={styles.infoBar}>
         <Text style={styles.infoText}>
-          З картки витрачено <Text style={styles.infoHighlight}>{formatCurrency(totalFromCard)}</Text>
+          З картки витрачено{' '}
+          <Text style={styles.infoHighlight}>{formatCurrency(totalFromCard)}</Text>
         </Text>
         <Text style={styles.infoText}>
-          З них покупки партнера: <Text style={styles.infoHighlight}>{formatCurrency(partnerSpend)}</Text>
+          З них покупки партнера:{' '}
+          <Text style={styles.infoHighlight}>{formatCurrency(partnerSpend)}</Text>
         </Text>
       </View>
 
-     
       {categoryBreakdown.length > 0 && (
         <View style={styles.categoriesGrid}>
           {categoryBreakdown.map((item) => {
@@ -98,7 +101,12 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
             const iconName = resolveIconName(category.iconName);
 
             return (
-             <TrueSpendCardCategoryCard iconName={iconName} color={category.color} amount={item.amount} />
+              <TrueSpendCardCategoryCard
+                key={item.categoryId}
+                iconName={iconName}
+                color={category.color}
+                amount={item.amount}
+              />
             );
           })}
         </View>
@@ -229,6 +237,4 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
   },
- 
-
 });

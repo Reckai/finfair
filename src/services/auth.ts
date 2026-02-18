@@ -16,8 +16,6 @@ export const authService = {
   async loginWithTelegram(): Promise<void> {
     const startParam = 'auth';
 
- 
-
     await Linking.openURL(`${TELEGRAM_BOT_URL}?start=${startParam}`);
   },
 
@@ -68,7 +66,7 @@ export const authService = {
    * Get current user
    */
   async getCurrentUser(): Promise<User | null> {
-    const response = await api.get<{user:User}>('/auth/me');
+    const response = await api.get<{ user: User }>('/auth/me');
     return response.success ? response.data?.user || null : null;
   },
 

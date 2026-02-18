@@ -8,7 +8,7 @@ export interface ApiCategory {
 
 export interface ApiTransaction {
   id: string;
-  amount: string; 
+  amount: string;
   categoryId: number;
   description: string | null;
   splitMode: 'PERSONAL' | 'PARTNER' | 'HALF';
@@ -27,15 +27,15 @@ export interface CreateTransactionPayload {
   pairId?: string;
 }
 
-export interface ByCategory{
-    categoryId: number;
-    name: string;
-    color: string;
-    amount: number;
+export interface ByCategory {
+  categoryId: number;
+  name: string;
+  color: string;
+  amount: number;
 }
 export interface ApiChartData {
-   byCategory:ByCategory[],
-   totalTrueSpend:number,
+  byCategory: ByCategory[];
+  totalTrueSpend: number;
 }
 
 export interface ApiSettlement {
@@ -46,8 +46,20 @@ export interface ApiSettlement {
   payeeId: string;
   pairId: string;
   createdAt: string;
-  payer?: { id: string; firstName: string; lastName?: string; username?: string; avatarUrl?: string | null };
-  payee?: { id: string; firstName: string; lastName?: string; username?: string; avatarUrl?: string | null };
+  payer?: {
+    id: string;
+    firstName: string;
+    lastName?: string;
+    username?: string;
+    avatarUrl?: string | null;
+  };
+  payee?: {
+    id: string;
+    firstName: string;
+    lastName?: string;
+    username?: string;
+    avatarUrl?: string | null;
+  };
 }
 
 export interface CreateSettlementPayload {
@@ -63,7 +75,7 @@ export interface ApiDashboardStats {
     partnerSpend: number;
     totalPaid: number;
   };
-  categoryBreakdown: Array<{ categoryId: number; amount: number }>;
+  categoryBreakdown: { categoryId: number; amount: number }[];
   recentTransactions: ApiTransaction[];
   partner: {
     id: string;
@@ -75,8 +87,20 @@ export interface ApiDashboardStats {
 }
 
 export interface ApiBalanceResponse {
-  userA: { id: string; firstName: string; lastName: string | null; username: string | null; avatarUrl: string | null };
-  userB: { id: string; firstName: string; lastName: string | null; username: string | null; avatarUrl: string | null };
+  userA: {
+    id: string;
+    firstName: string;
+    lastName: string | null;
+    username: string | null;
+    avatarUrl: string | null;
+  };
+  userB: {
+    id: string;
+    firstName: string;
+    lastName: string | null;
+    username: string | null;
+    avatarUrl: string | null;
+  };
   amount: number;
   direction: { from: string; to: string } | null;
 }

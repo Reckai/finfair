@@ -5,7 +5,7 @@ import { apiToTransaction, transactionToCreatePayload } from '../utils/transacti
 
 export const transactionsApi = {
   async getAll(): Promise<Transaction[]> {
-    const res = await api.get<{transactions: ApiTransaction[]}>('/transactions');
+    const res = await api.get<{ transactions: ApiTransaction[] }>('/transactions');
     if (res.success && res.data) {
       return res.data.transactions.map(apiToTransaction);
     }
@@ -13,7 +13,7 @@ export const transactionsApi = {
   },
 
   async getAllPair(): Promise<Transaction[]> {
-    const res = await api.get<{transactions: ApiTransaction[]}>('/transactions/pair');
+    const res = await api.get<{ transactions: ApiTransaction[] }>('/transactions/pair');
     if (res.success && res.data) {
       return res.data.transactions.map(apiToTransaction);
     }
@@ -21,10 +21,13 @@ export const transactionsApi = {
   },
 
   async create(
-    tx: Pick<Transaction, 'amount' | 'categoryId' | 'splitMode'> & { description?: string; pairId?: string }
+    tx: Pick<Transaction, 'amount' | 'categoryId' | 'splitMode'> & {
+      description?: string;
+      pairId?: string;
+    },
   ): Promise<Transaction | null> {
     const payload = transactionToCreatePayload(tx);
-    const res = await api.post<{transaction: ApiTransaction}>('/transactions', payload);
+    const res = await api.post<{ transaction: ApiTransaction }>('/transactions', payload);
     if (res.success && res.data) {
       return apiToTransaction(res.data.transaction);
     }
@@ -32,7 +35,7 @@ export const transactionsApi = {
   },
 
   async update(id: string, patch: Partial<CreateTransactionPayload>): Promise<Transaction | null> {
-    const res = await api.put<{transaction: ApiTransaction}>(`/transactions/${id}`, patch);
+    const res = await api.put<{ transaction: ApiTransaction }>(`/transactions/${id}`, patch);
     if (res.success && res.data) {
       return apiToTransaction(res.data.transaction);
     }

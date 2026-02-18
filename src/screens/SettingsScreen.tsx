@@ -18,8 +18,6 @@ import { colors } from '../constants/colors';
 import { useAppStore } from '../store/useAppStore';
 import { pairsApi } from '../services/pairs';
 
-
-
 export const SettingsScreen: React.FC = () => {
   const pairId = useAppStore((s) => s.pairId);
   const setPairId = useAppStore((s) => s.setPairId);
@@ -157,10 +155,7 @@ export const SettingsScreen: React.FC = () => {
                 </Text>
                 <Text style={styles.codeDisplay}>{inviteCode}</Text>
                 <View style={styles.codeActions}>
-                  <Pressable
-                    style={styles.codeButton}
-                    onPress={handleCopyCode}
-                  >
+                  <Pressable style={styles.codeButton} onPress={handleCopyCode}>
                     <Text style={styles.codeButtonText}>Скопировать</Text>
                   </Pressable>
                   <Pressable
@@ -187,25 +182,16 @@ export const SettingsScreen: React.FC = () => {
                 placeholderTextColor={colors.textMuted}
               />
               <Pressable
-                style={[
-                  styles.saveButton,
-                  !name.trim() && styles.saveButtonDisabled,
-                ]}
+                style={[styles.saveButton, !name.trim() && styles.saveButtonDisabled]}
                 onPress={handleSavePartnerName}
                 disabled={!name.trim()}
               >
-                <Text style={styles.saveButtonText}>
-                  {saved ? 'Сохранено!' : 'Сохранить'}
-                </Text>
+                <Text style={styles.saveButtonText}>{saved ? 'Сохранено!' : 'Сохранить'}</Text>
               </Pressable>
             </View>
 
             {/* Leave pair */}
-            <Pressable
-              style={styles.dangerButton}
-              onPress={handleLeavePair}
-              disabled={loading}
-            >
+            <Pressable style={styles.dangerButton} onPress={handleLeavePair} disabled={loading}>
               {loading ? (
                 <ActivityIndicator color="#FFFFFF" />
               ) : (
@@ -221,11 +207,7 @@ export const SettingsScreen: React.FC = () => {
               <Text style={styles.sectionDescription}>
                 Создайте пару и отправьте код приглашения партнёру
               </Text>
-              <Pressable
-                style={styles.primaryButton}
-                onPress={handleCreatePair}
-                disabled={loading}
-              >
+              <Pressable style={styles.primaryButton} onPress={handleCreatePair} disabled={loading}>
                 {loading ? (
                   <ActivityIndicator color="#FFFFFF" />
                 ) : (
@@ -240,10 +222,7 @@ export const SettingsScreen: React.FC = () => {
                 <Text style={styles.sectionTitle}>Код приглашения</Text>
                 <Text style={styles.codeDisplay}>{inviteCode}</Text>
                 <View style={styles.codeActions}>
-                  <Pressable
-                    style={styles.codeButton}
-                    onPress={handleCopyCode}
-                  >
+                  <Pressable style={styles.codeButton} onPress={handleCopyCode}>
                     <Text style={styles.codeButtonText}>Скопировать</Text>
                   </Pressable>
                   <Pressable
@@ -259,15 +238,11 @@ export const SettingsScreen: React.FC = () => {
             {/* Join pair */}
             <View style={styles.section}>
               <Text style={styles.sectionTitle}>Присоединиться к паре</Text>
-              <Text style={styles.sectionDescription}>
-                Введите код приглашения от партнёра
-              </Text>
+              <Text style={styles.sectionDescription}>Введите код приглашения от партнёра</Text>
               <TextInput
                 style={styles.input}
                 value={joinCode}
-                onChangeText={(text) =>
-                  setJoinCode(text.replace(/[^0-9a-fA-F]/g, '').slice(0, 8))
-                }
+                onChangeText={(text) => setJoinCode(text.replace(/[^0-9a-fA-F]/g, '').slice(0, 8))}
                 placeholder="Введите код (8 символов)"
                 placeholderTextColor={colors.textMuted}
                 maxLength={8}
@@ -336,8 +311,8 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: colors.border,
   },
-  settingButton:{
-     marginTop: 12,
+  settingButton: {
+    marginTop: 12,
   },
   pairedBanner: {
     flexDirection: 'row',

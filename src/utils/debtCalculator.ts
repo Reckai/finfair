@@ -16,7 +16,7 @@ interface TransactionImpact {
  */
 export function calculateTransactionImpact(
   tx: Transaction,
-  currentUserId: string
+  currentUserId: string,
 ): TransactionImpact {
   const { amount, splitMode, userId } = tx;
   const isMine = userId === currentUserId;
@@ -73,7 +73,7 @@ export function calculateTransactionImpact(
 export function calculateBalance(
   transactions: Transaction[],
   settlements: Settlement[],
-  currentUserId: string
+  currentUserId: string,
 ): BalanceState {
   let netBalance = 0;
   let trueSpend = 0;

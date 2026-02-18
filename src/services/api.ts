@@ -27,7 +27,7 @@ class ApiService {
         }
         return config;
       },
-      (error) => Promise.reject(error)
+      (error) => Promise.reject(error),
     );
 
     // Response interceptor for error handling
@@ -39,7 +39,7 @@ class ApiService {
           this.clearToken();
         }
         return Promise.reject(error);
-      }
+      },
     );
   }
 
