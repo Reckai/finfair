@@ -2,6 +2,8 @@ import { create } from 'zustand';
 import { User, Transaction, Settlement, BalanceState, AppSettings, Category } from '../types';
 import { calculateBalance } from '../utils/debtCalculator';
 import { fallbackCategories } from '../constants/categories';
+import { cacheClear } from '../db/cache';
+import { outboxClear } from '../db/outbox';
 
 // --- Store interface ---
 interface AppState {
@@ -13,6 +15,7 @@ interface AppState {
   categories: Category[];
   settings: AppSettings;
   pairId: string | null;
+  isOnline: boolean;
 
   // Actions
   setUser: (user: User | null) => void;
@@ -27,6 +30,7 @@ interface AppState {
   setPartnerName: (name: string) => void;
   setPairId: (pairId: string | null) => void;
   logout: () => void;
+  setIsOnline: (isOnline: boolean) => void;
 }
 
 // --- Initial state ---
@@ -39,6 +43,7 @@ const initialState = {
   settings: {
     partnerName: 'Партнёр',
   },
+  isOnline: true,
   pairId: null as string | null,
 };
 
@@ -82,6 +87,9 @@ export const useAppStore = create<AppState>((set, get) => ({
     })),
 
   setPairId: (pairId) => set({ pairId }),
-
-  logout: () => set({ ...initialState, isLoading: false }),
+  setIsOnline: (isOnline) => set({ isOnline }),
+  logout: () => {
+    outboxClear();
+    cacheClear();
+    set({ ...initialState, isLoading: false })}
 }));

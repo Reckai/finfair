@@ -47,6 +47,7 @@ export interface Transaction {
   pairId?: string;
   createdAt: string;
   category?: Category;
+  _pendingOutBoxId?:string
 }
 
 // Category types
@@ -67,6 +68,8 @@ export interface Settlement {
   pairId: string;
   description?: string;
   createdAt: string;
+  _pendingOutBoxId?:string
+
 }
 
 // Balance state
