@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, RefreshControl, Pressable } from 'react-native';
 import { FlashList } from '@shopify/flash-list';
 
@@ -6,8 +6,9 @@ import { colors } from '../constants/colors';
 import { TransactionCard } from '../components/TransactionCard';
 import { MainTabParamList, Transaction } from '../types';
 import { useAppStore } from '../store/useAppStore';
-import { transactionsApi } from '../services/transactions';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { useTransactions } from '../hooks/useTransactions';
+import { useManualSync } from '../hooks/useManualSync';
 
 type FilterType = 'all' | 'debt';
 type Props = BottomTabScreenProps<MainTabParamList, 'History'>;
@@ -18,29 +19,16 @@ const isDebtTransaction = (tx: Transaction): boolean => {
 
 export const HistoryScreen: React.FC<Props> = () => {
   const [filter, setFilter] = useState<FilterType>('all');
-  const [refreshing, setRefreshing] = useState(false);
 
-  const transactions = useAppStore((s) => s.transactions);
-  const pairId = useAppStore((s) => s.pairId);
+  const { data: transactions = [] } = useTransactions();
+  const { sync, isSyncing: refreshing } = useManualSync();
   const user = useAppStore((s) => s.user);
-  const setTransactions = useAppStore((s) => s.setTransactions);
 
   const currentUserId = user?.id || '';
 
-  const loadTransactions = useCallback(async () => {
-    const data = pairId ? await transactionsApi.getAllPair() : await transactionsApi.getAll();
-    setTransactions(data);
-  }, [pairId, setTransactions]);
-
-  useEffect(() => {
-    loadTransactions();
-  }, [loadTransactions]);
-
   const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await loadTransactions();
-    setRefreshing(false);
-  }, [loadTransactions]);
+    await sync();
+  }, [sync]);
 
   const handleFilterAll = useCallback(() => setFilter('all'), []);
   const handleFilterDebt = useCallback(() => setFilter('debt'), []);

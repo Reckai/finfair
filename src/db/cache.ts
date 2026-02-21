@@ -3,9 +3,9 @@ import { CacheKey } from '../types/offline';
 
 export function cacheGet<T>(key: CacheKey): { data: T; lastSync: number } | null {
   const db = getDatabase();
-  const row = db.getFirstSync<{ data: string; lastSync: number }>(
+  const row = db.getFirstSync<{ data: string; last_sync: number }>(
     `
-        SELECT data, lastSync FROM cache WHERE key = ?`,
+        SELECT data, last_sync FROM cache WHERE key = ?`,
     [key],
   );
   if (!row) {
@@ -13,7 +13,7 @@ export function cacheGet<T>(key: CacheKey): { data: T; lastSync: number } | null
   }
   return {
     data: JSON.parse(row.data) as T,
-    lastSync: row.lastSync,
+    lastSync: row.last_sync,
   };
 }
 

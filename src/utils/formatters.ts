@@ -5,7 +5,7 @@ import { ru } from 'date-fns/locale';
  * Format amount as currency
  */
 export const formatCurrency = (amount: number, currency = '₴'): string => {
-  return `${amount.toLocaleString('ru-RU')} ${currency}`;
+  return `${amount.toLocaleString('ru-RU', { maximumFractionDigits: 1 })} ${currency}`;
 };
 
 /**

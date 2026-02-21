@@ -11,6 +11,9 @@ import { SettingsScreen } from '../screens/SettingsScreen';
 import { RootStackParamList, MainTabParamList } from '../types';
 import { colors } from '../constants/colors';
 import { useAppStore } from '../store/useAppStore';
+import { useNetworkStatus } from '../hooks/useNetworlStatus';
+import { useSyncOnReconnect } from '../hooks/useSyncOnReconnect';
+import { ConnectionStatusBar } from '../components/ConnectionStatusBar';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const Tab = createBottomTabNavigator<MainTabParamList>();
@@ -33,67 +36,73 @@ const linking: LinkingOptions<RootStackParamList> = {
 };
 
 const MainTabs: React.FC = () => {
+  useNetworkStatus();
+  useSyncOnReconnect();
   return (
-    <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ focused, color, size }) => {
-          let iconName: keyof typeof Ionicons.glyphMap;
+    <>
+      <ConnectionStatusBar />
 
-          switch (route.name) {
-            case 'Dashboard':
-              iconName = focused ? 'home' : 'home-outline';
-              break;
-            case 'AddTransaction':
-              iconName = focused ? 'add-circle' : 'add-circle-outline';
-              break;
-            case 'History':
-              iconName = focused ? 'time' : 'time-outline';
-              break;
-            case 'Settings':
-              iconName = focused ? 'settings' : 'settings-outline';
-              break;
-            default:
-              iconName = 'help-circle-outline';
-          }
+      <Tab.Navigator
+        screenOptions={({ route }) => ({
+          tabBarIcon: ({ focused, color, size }) => {
+            let iconName: keyof typeof Ionicons.glyphMap;
 
-          return <Ionicons name={iconName} size={size} color={color} />;
-        },
-        tabBarActiveTintColor: colors.primary,
-        tabBarInactiveTintColor: colors.textMuted,
-        tabBarStyle: {
-          backgroundColor: colors.surface,
-          borderTopColor: colors.border,
-          paddingBottom: 8,
-          paddingTop: 8,
-          height: 60,
-        },
-        headerShown: true,
-        headerStyle: { backgroundColor: '#FFFFFF' },
-        headerTitleStyle: { fontWeight: '600', color: colors.textPrimary },
-        headerShadowVisible: false,
-      })}
-    >
-      <Tab.Screen
-        name="Dashboard"
-        component={DashboardScreen}
-        options={{ tabBarLabel: 'Главная', headerShown: false }}
-      />
-      <Tab.Screen
-        name="AddTransaction"
-        component={AddTransactionScreen}
-        options={{ tabBarLabel: 'Добавить', headerTitle: 'Додати витрату' }}
-      />
-      <Tab.Screen
-        name="History"
-        component={HistoryScreen}
-        options={{ tabBarLabel: 'История', headerTitle: 'Історія' }}
-      />
-      <Tab.Screen
-        name="Settings"
-        component={SettingsScreen}
-        options={{ tabBarLabel: 'Настройки', headerTitle: 'Налаштування' }}
-      />
-    </Tab.Navigator>
+            switch (route.name) {
+              case 'Dashboard':
+                iconName = focused ? 'home' : 'home-outline';
+                break;
+              case 'AddTransaction':
+                iconName = focused ? 'add-circle' : 'add-circle-outline';
+                break;
+              case 'History':
+                iconName = focused ? 'time' : 'time-outline';
+                break;
+              case 'Settings':
+                iconName = focused ? 'settings' : 'settings-outline';
+                break;
+              default:
+                iconName = 'help-circle-outline';
+            }
+
+            return <Ionicons name={iconName} size={size} color={color} />;
+          },
+          tabBarActiveTintColor: colors.primary,
+          tabBarInactiveTintColor: colors.textMuted,
+          tabBarStyle: {
+            backgroundColor: colors.surface,
+            borderTopColor: colors.border,
+            paddingBottom: 8,
+            paddingTop: 8,
+            height: 60,
+          },
+          headerShown: true,
+          headerStyle: { backgroundColor: '#FFFFFF' },
+          headerTitleStyle: { fontWeight: '600', color: colors.textPrimary },
+          headerShadowVisible: false,
+        })}
+      >
+        <Tab.Screen
+          name="Dashboard"
+          component={DashboardScreen}
+          options={{ tabBarLabel: 'Главная', headerShown: false }}
+        />
+        <Tab.Screen
+          name="AddTransaction"
+          component={AddTransactionScreen}
+          options={{ tabBarLabel: 'Добавить', headerTitle: 'Додати витрату' }}
+        />
+        <Tab.Screen
+          name="History"
+          component={HistoryScreen}
+          options={{ tabBarLabel: 'История', headerTitle: 'Історія' }}
+        />
+        <Tab.Screen
+          name="Settings"
+          component={SettingsScreen}
+          options={{ tabBarLabel: 'Настройки', headerTitle: 'Налаштування' }}
+        />
+      </Tab.Navigator>
+    </>
   );
 };
 

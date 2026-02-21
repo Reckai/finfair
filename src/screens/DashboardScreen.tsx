@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
@@ -7,38 +7,22 @@ import { TransactionCard } from '../components/TransactionCard';
 import { TrueSpendCard } from '../components/TrueSpendCard';
 import { NetBalanceCard } from '../components/NetBalanceCard';
 import { SettleUpModal } from '../components/SettleUpModal';
-import { useAppStore } from '../store/useAppStore';
-import { dashboardApi } from '../services/dashboard';
-import { settlementsApi } from '../services/settlements';
 import { apiToTransaction } from '../utils/transactionAdapter';
-import { ApiDashboardStats } from '../types/api';
 import { MainTabParamList } from '../types';
+import { useDashboardStats } from '../hooks/useDashboardStats';
+import { useCreateSettlement } from '../hooks/useCreateSettlement';
+import { useManualSync } from '../hooks/useManualSync';
 type Props = BottomTabScreenProps<MainTabParamList, 'Dashboard'>;
 
 export const DashboardScreen: React.FC<Props> = () => {
   const insets = useSafeAreaInsets();
   const [settleModalVisible, setSettleModalVisible] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
-  const [stats, setStats] = useState<ApiDashboardStats | null>(null);
-
-  const addSettlement = useAppStore((s) => s.addSettlement);
-
-  const loadData = useCallback(async () => {
-    const data = await dashboardApi.getStats();
-    if (data) {
-      setStats(data);
-    }
-  }, []);
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
-
+  const { data: stats } = useDashboardStats();
+  const { sync, isSyncing } = useManualSync();
   const onRefresh = useCallback(async () => {
-    setRefreshing(true);
-    await loadData();
-    setRefreshing(false);
-  }, [loadData]);
-
+    await sync();
+  }, [sync]);
+  const addSettlement = useCreateSettlement();
   const partnerId = stats?.partner?.id ?? null;
 
   const handleSettleUp = () => {
@@ -48,14 +32,10 @@ export const DashboardScreen: React.FC<Props> = () => {
   const handleSettle = async (amount: number) => {
     if (!partnerId) return;
 
-    const settlement = await settlementsApi.create({
+    addSettlement.mutate({
       amount,
       payeeId: partnerId,
     });
-    if (settlement) {
-      addSettlement(settlement);
-      await loadData();
-    }
   };
 
   const handleCloseSettleModal = useCallback(() => setSettleModalVisible(false), []);
@@ -69,7 +49,7 @@ export const DashboardScreen: React.FC<Props> = () => {
       <ScrollView
         style={styles.container}
         contentContainerStyle={[styles.content, { paddingTop: insets.top + 16 }]}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
+        refreshControl={<RefreshControl refreshing={isSyncing} onRefresh={onRefresh} />}
       >
         <View style={styles.header}>
           <Text style={styles.greeting}>Привіт!</Text>

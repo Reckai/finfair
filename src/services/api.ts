@@ -65,6 +65,7 @@ class ApiService {
   }
 
   async post<T>(url: string, data?: unknown): Promise<ApiResponse<T>> {
+    console.log(API_BASE_URL);
     try {
       const response = await this.client.post<T>(url, data);
       return { success: true, data: response.data };

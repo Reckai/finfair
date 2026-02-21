@@ -16,6 +16,7 @@ interface AppState {
   settings: AppSettings;
   pairId: string | null;
   isOnline: boolean;
+  pendingOutboxCount: number;
 
   // Actions
   setUser: (user: User | null) => void;
@@ -31,6 +32,7 @@ interface AppState {
   setPairId: (pairId: string | null) => void;
   logout: () => void;
   setIsOnline: (isOnline: boolean) => void;
+  setPendingOutboxCount: (count: number) => void;
 }
 
 // --- Initial state ---
@@ -44,6 +46,7 @@ const initialState = {
     partnerName: 'Партнёр',
   },
   isOnline: true,
+  pendingOutboxCount: 0,
   pairId: null as string | null,
 };
 
@@ -88,8 +91,10 @@ export const useAppStore = create<AppState>((set, get) => ({
 
   setPairId: (pairId) => set({ pairId }),
   setIsOnline: (isOnline) => set({ isOnline }),
+  setPendingOutboxCount: (count) => set({ pendingOutboxCount: count }),
   logout: () => {
     outboxClear();
     cacheClear();
-    set({ ...initialState, isLoading: false })}
+    set({ ...initialState, isLoading: false });
+  },
 }));

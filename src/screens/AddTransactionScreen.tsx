@@ -16,8 +16,8 @@ import { CategoryGrid } from '../components/CategoryGrid';
 import { SplitModeToggle } from '../components/OwnerToggle';
 import { MainTabParamList, SplitMode } from '../types';
 import { useAppStore } from '../store/useAppStore';
-import { transactionsApi } from '../services/transactions';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { useCreateTransaction } from '../hooks/useCreateTransaction';
 
 type Props = BottomTabScreenProps<MainTabParamList, 'AddTransaction'>;
 
@@ -27,10 +27,8 @@ export const AddTransactionScreen: React.FC<Props> = () => {
   const [description, setDescription] = useState('');
   const [splitMode, setSplitMode] = useState<SplitMode>('HALF');
   const [isFocused, setIsFocused] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-
+  const { mutate: createTransaction, isPending: isSubmitting } = useCreateTransaction();
   const partnerName = useAppStore((s) => s.settings.partnerName);
-  const addTransaction = useAppStore((s) => s.addTransaction);
   const pairId = useAppStore((s) => s.pairId);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -45,34 +43,28 @@ export const AddTransactionScreen: React.FC<Props> = () => {
       return;
     }
 
-    setIsSubmitting(true);
-    try {
-      const result = await transactionsApi.create({
+    createTransaction(
+      {
         amount: parseFloat(amount),
         categoryId: selectedCategory,
         splitMode,
         description: description || undefined,
         pairId: pairId || undefined,
-      });
-
-      if (result) {
-        addTransaction(result);
-
-        // Reset form
-        setAmount('');
-        setSelectedCategory(null);
-        setDescription('');
-        setSplitMode('HALF');
-        setIsFocused(false);
-      } else {
-        Alert.alert('Ошибка', 'Не удалось создать транзакцию');
-      }
-    } catch {
-      Alert.alert('Ошибка', 'Не удалось создать транзакцию');
-    } finally {
-      setIsSubmitting(false);
-      handleScrollUp();
-    }
+      },
+      {
+        onSuccess: () => {
+          setAmount('');
+          setSelectedCategory(null);
+          setDescription('');
+          setSplitMode('HALF');
+          setIsFocused(false);
+          handleScrollUp();
+        },
+        onError: () => {
+          Alert.alert('Ошибка', 'Не удалось создать транзакцию');
+        },
+      },
+    );
   };
 
   return (

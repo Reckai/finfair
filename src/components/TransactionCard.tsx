@@ -42,6 +42,9 @@ export const TransactionCard: React.FC<TransactionCardProps> = React.memo(functi
         <Text style={styles.time}>{formatRelativeTime(transaction.createdAt)}</Text>
       </View>
       <Text style={styles.amount}>-{formatCurrency(transaction.amount)}</Text>
+      {transaction._pendingOutBoxId && (
+        <Ionicons name="cloud-upload-outline" size={16} color="#F59E0B" style={{ marginLeft: 6 }} />
+      )}
     </View>
   );
 });

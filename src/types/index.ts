@@ -28,7 +28,7 @@ export interface User {
 }
 
 // Split mode type
-export type SplitMode = 'PERSONAL' | 'PARTNER' | 'HALF';
+export type SplitMode = 'PERSONAL' | 'PARTNER' | 'HALF' | 'CUSTOM';
 
 // App Settings
 export interface AppSettings {
@@ -47,7 +47,7 @@ export interface Transaction {
   pairId?: string;
   createdAt: string;
   category?: Category;
-  _pendingOutBoxId?:string
+  _pendingOutBoxId?: string;
 }
 
 // Category types
@@ -68,8 +68,7 @@ export interface Settlement {
   pairId: string;
   description?: string;
   createdAt: string;
-  _pendingOutBoxId?:string
-
+  _pendingOutBoxId?: string;
 }
 
 // Balance state

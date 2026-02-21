@@ -16,10 +16,9 @@ export const CategoryItem = ({ category, isSelected, onPress }: CategoryItemProp
   const iconContainerDynamicStyle = useMemo(
     () => [
       styles.iconContainer,
-      { backgroundColor: category.color + '20' },
-      isSelected && { backgroundColor: category.color },
+      { backgroundColor: isSelected ? category.color : category.color + '20' },
     ],
-    [styles],
+    [category.color, isSelected],
   );
 
   return (
@@ -34,7 +33,7 @@ export const CategoryItem = ({ category, isSelected, onPress }: CategoryItemProp
           color={isSelected ? '#FFFFFF' : category.color}
         />
       </View>
-      <Text style={iconContainerDynamicStyle} numberOfLines={1}>
+      <Text style={styles.categoryName} numberOfLines={1}>
         {category.name}
       </Text>
     </Pressable>
@@ -61,5 +60,10 @@ const styles = StyleSheet.create({
   },
   categoryItemSelected: {
     borderColor: colors.primary,
+  },
+  categoryName: {
+    fontSize: 12,
+    color: colors.textPrimary,
+    textAlign: 'center',
   },
 });

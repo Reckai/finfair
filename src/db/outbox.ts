@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import * as Crypto from 'expo-crypto';
 import { getDatabase } from './database';
 import { OutboxEntry, EntityType, OutboxAction } from '../types/offline';
 const MAX_RETRIES = 3;
@@ -52,7 +52,7 @@ export function outboxPush(params: {
     }
   }
 
-  const id = uuidv4();
+  const id = Crypto.randomUUID();
   const timestamp = Date.now();
 
   db.runSync(

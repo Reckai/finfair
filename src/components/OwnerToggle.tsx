@@ -17,7 +17,8 @@ export const SplitModeToggle: React.FC<SplitModeToggleProps> = ({
   const options: { key: SplitMode; label: string }[] = [
     { key: 'PERSONAL', label: 'Себя' },
     { key: 'HALF', label: 'Пополам' },
-    { key: 'PARTNER', label: `За ${partnerName}` },
+    { key: 'PARTNER', label: `${partnerName}` },
+    { key: 'CUSTOM', label: 'Своё' },
   ];
 
   return (

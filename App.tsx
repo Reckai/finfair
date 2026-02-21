@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { QueryClientProvider } from '@tanstack/react-query';    // <-- НОВОЕ
-import { queryClient } from './src/query/queryClient';           // <-- НОВОЕ
-import { getDatabase } from './src/db/database';   
+import { QueryClientProvider } from '@tanstack/react-query'; // <-- НОВОЕ
+import { queryClient } from './src/query/queryClient'; // <-- НОВОЕ
+import { getDatabase } from './src/db/database';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { authService } from './src/services/auth';
 import { useAppStore } from './src/store/useAppStore';
@@ -60,10 +60,10 @@ export default function App() {
 
   return (
     <QueryClientProvider client={queryClient}>
-    <SafeAreaProvider>
-      <StatusBar style="auto" />
-      <AppNavigator />
-    </SafeAreaProvider>
+      <SafeAreaProvider>
+        <StatusBar style="auto" />
+        <AppNavigator />
+      </SafeAreaProvider>
     </QueryClientProvider>
   );
 }
