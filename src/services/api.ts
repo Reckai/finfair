@@ -44,15 +44,37 @@ class ApiService {
   }
 
   async getToken(): Promise<string | null> {
-    return await SecureStore.getItemAsync(TOKEN_KEY);
+    try {
+      return await SecureStore.getItemAsync(TOKEN_KEY);
+    } catch {
+      // SecureStore not available (web), fallback to localStorage
+      try {
+        return localStorage.getItem(TOKEN_KEY);
+      } catch {
+        return null;
+      }
+    }
   }
 
   async setToken(token: string): Promise<void> {
-    await SecureStore.setItemAsync(TOKEN_KEY, token);
+    try {
+      await SecureStore.setItemAsync(TOKEN_KEY, token);
+    } catch {
+      // SecureStore not available (web), fallback to localStorage
+      try {
+        localStorage.setItem(TOKEN_KEY, token);
+      } catch {}
+    }
   }
 
   async clearToken(): Promise<void> {
-    await SecureStore.deleteItemAsync(TOKEN_KEY);
+    try {
+      await SecureStore.deleteItemAsync(TOKEN_KEY);
+    } catch {
+      try {
+        localStorage.removeItem(TOKEN_KEY);
+      } catch {}
+    }
   }
 
   async get<T>(url: string): Promise<ApiResponse<T>> {

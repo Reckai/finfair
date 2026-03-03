@@ -43,7 +43,6 @@ export const AuthScreen: React.FC<Props> = ({ route }) => {
     setLoading(true);
     try {
       const result = await authService.loginWithToken(manualToken.trim());
-      Alert.alert(`Ошибка', 'Неверный токен,${result}`);
       if (result) {
         setUser(result.user);
       } else {

@@ -25,7 +25,7 @@ export default function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        getDatabase();
+        try { getDatabase(); } catch {}
         const authenticated = await authService.isAuthenticated();
         if (authenticated) {
           const user = await authService.getCurrentUser();

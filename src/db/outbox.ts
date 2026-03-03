@@ -22,7 +22,12 @@ export function outboxPush(params: {
   tempId?: string;
   entityId?: string;
 }) {
-  const db = getDatabase();
+  let db;
+  try {
+    db = getDatabase();
+  } catch {
+    return '';
+  }
   if (params.action === 'delete' && params.entityId) {
     const pendingCreate = db.getFirstSync<{ id: string }>(
       `SELECT id FROM outbox WHERE temp_id = ? AND action = 'create' AND status = 'pending'`,
@@ -72,43 +77,61 @@ export function outboxPush(params: {
 }
 
 export function outboxGetPending(): OutboxEntry[] {
-  const db = getDatabase();
-  const rows = db.getAllSync<OutboxRow>(`SELECT * FROM outbox WHERE status = 'pending'`);
-  return rows.map(rowToEntry);
+  try {
+    const db = getDatabase();
+    const rows = db.getAllSync<OutboxRow>(`SELECT * FROM outbox WHERE status = 'pending'`);
+    return rows.map(rowToEntry);
+  } catch {
+    return [];
+  }
 }
 
 export function outboxRemove(id: string): void {
-  const db = getDatabase();
-  db.runSync(`DELETE FROM outbox WHERE id = ?`, [id]);
+  try {
+    const db = getDatabase();
+    db.runSync(`DELETE FROM outbox WHERE id = ?`, [id]);
+  } catch {}
 }
 
 export function outboxIncrementRetry(id: string): void {
-  const db = getDatabase();
-  db.runSync(
-    `UPDATE outbox SET retry_count = retry_count + 1
-    , status = CASE WHEN retry_count + 1 >= ? THEN 'failed' ELSE 'pending' END
-    WHERE id =?`,
-    [MAX_RETRIES, id],
-  );
+  try {
+    const db = getDatabase();
+    db.runSync(
+      `UPDATE outbox SET retry_count = retry_count + 1
+      , status = CASE WHEN retry_count + 1 >= ? THEN 'failed' ELSE 'pending' END
+      WHERE id =?`,
+      [MAX_RETRIES, id],
+    );
+  } catch {}
 }
 
 export function outboxPendingCount(): number {
-  const db = getDatabase();
-  const result = db.getFirstSync<{ count: number }>(
-    `SELECT COUNT(*) as count FROM outbox WHERE status = 'pending'`,
-  );
-  return result?.count ?? 0;
+  try {
+    const db = getDatabase();
+    const result = db.getFirstSync<{ count: number }>(
+      `SELECT COUNT(*) as count FROM outbox WHERE status = 'pending'`,
+    );
+    return result?.count ?? 0;
+  } catch {
+    return 0;
+  }
 }
 
 export function outboxGetFailed(): OutboxEntry[] {
-  const db = getDatabase();
-  const rows = db.getAllSync<OutboxRow>(`SELECT * FROM outbox WHERE status = 'failed'`);
-  return rows.map(rowToEntry);
+  try {
+    const db = getDatabase();
+    const rows = db.getAllSync<OutboxRow>(`SELECT * FROM outbox WHERE status = 'failed'`);
+    return rows.map(rowToEntry);
+  } catch {
+    return [];
+  }
 }
 
 export function outboxClear(): void {
-  const db = getDatabase();
-  db.runSync(`DELETE FROM outbox`);
+  try {
+    const db = getDatabase();
+    db.runSync(`DELETE FROM outbox`);
+  } catch {}
 }
 
 function rowToEntry(row: OutboxRow): OutboxEntry {
