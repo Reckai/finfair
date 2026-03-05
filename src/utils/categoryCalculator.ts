@@ -3,6 +3,7 @@ import { Transaction } from '../types';
 export interface CategorySpend {
   categoryId: number;
   amount: number;
+  parentId: number;
 }
 
 /**

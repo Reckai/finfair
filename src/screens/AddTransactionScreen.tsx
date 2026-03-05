@@ -31,7 +31,6 @@ export const AddTransactionScreen: React.FC<Props> = () => {
   const partnerName = useAppStore((s) => s.settings.partnerName);
   const pairId = useAppStore((s) => s.pairId);
   const scrollRef = useRef<ScrollView>(null);
-
   const handleScrollUp = () => {
     scrollRef.current?.scrollTo({
       y: 0,

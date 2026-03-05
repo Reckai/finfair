@@ -42,3 +42,10 @@ yarn-error.log*
 # Temporary files
 *.tmp
 *.temp
+
+
+# Playwright MCP
+.playwright-mcp/
+
+# Claude local settings
+.claude/settings.local.json

@@ -9,7 +9,7 @@ import { Transaction } from '../types';
 interface CreateTransactionInput {
   amount: number;
   categoryId: number;
-  splitMode: 'PERSONAL' | 'PARTNER' | 'HALF';
+  splitMode: 'PERSONAL' | 'PARTNER' | 'HALF' | 'CUSTOM';
   description?: string;
   pairId?: string;
 }

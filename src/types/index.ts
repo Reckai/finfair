@@ -2,6 +2,7 @@
 export type {
   ApiTransaction,
   ApiCategory,
+  BudgetType,
   CreateTransactionPayload,
   ApiSettlement,
   CreateSettlementPayload,
@@ -57,6 +58,9 @@ export interface Category {
   iconName: string;
   color: string;
   isSystem: boolean;
+  parentId?: number;
+  subcategories?: Category[];
+  budgetType?: import('./api').BudgetType;
 }
 
 // Settlement types

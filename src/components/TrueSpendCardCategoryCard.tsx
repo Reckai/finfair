@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { View, StyleSheet, Text } from 'react-native';
 import { formatCurrency } from '../utils/formatters';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
 
 export interface TrueSpendCardCategoryCardProps {
@@ -19,7 +19,7 @@ export const TrueSpendCardCategoryCard = (props: TrueSpendCardCategoryCardProps)
   return (
     <View style={styles.categoryItem}>
       <View style={iconDynamicStyle}>
-        <Ionicons name={iconName as keyof typeof Ionicons.glyphMap} size={18} color={color} />
+        <MaterialCommunityIcons name={iconName as keyof typeof MaterialCommunityIcons.glyphMap} size={18} color={color} />
       </View>
       <Text style={styles.categoryAmount}>{formatCurrency(amount)}</Text>
     </View>

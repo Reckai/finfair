@@ -24,7 +24,6 @@ export const authService = {
    */
   async loginWithToken(token: string): Promise<AuthResponse | null> {
     const response = await api.post<AuthResponse>('/auth/telegram', { token });
-    console.log(response);
     if (response.success && response.data) {
       await api.setToken(response.data.accessToken);
       return response.data;

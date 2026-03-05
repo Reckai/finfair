@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react';
-import { View, StyleSheet } from 'react-native';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { View, StyleSheet, Pressable, Text } from 'react-native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 import { colors } from '../constants/colors';
 import { useAppStore } from '../store/useAppStore';
@@ -7,7 +8,7 @@ import { CategoryItem } from './CategoryItem';
 
 interface CategoryGridProps {
   selectedCategory: number | null;
-  onSelectCategory: (categoryId: number) => void;
+  onSelectCategory: (categoryId: number | null) => void;
 }
 
 export const CategoryGrid: React.FC<CategoryGridProps> = ({
@@ -15,25 +16,64 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({
   onSelectCategory,
 }) => {
   const categories = useAppStore((s) => s.categories);
+  const [expandedParentId, setExpandedParentId] = useState<number | null>(null);
+
+  useEffect(() => {
+    if (selectedCategory === null) {
+      setExpandedParentId(null);
+    }
+  }, [selectedCategory]);
+
   const handleSelectCategory = useCallback(
     (categoryId: number) => {
-      onSelectCategory(categoryId);
+      const cat = categories.find((c) => c.id === categoryId);
+      if (cat?.subcategories?.length) {
+        setExpandedParentId(categoryId);
+      } else {
+        onSelectCategory(categoryId);
+      }
     },
-    [onSelectCategory],
+    [onSelectCategory, categories],
   );
+
+  const expandedParent = categories.find((c) => c.id === expandedParentId);
   return (
     <View style={styles.container}>
-      {categories.map((category) => {
-        const isSelected = selectedCategory === category.id;
-        return (
-          <CategoryItem
-            key={category.id}
-            category={category}
-            isSelected={isSelected}
-            onPress={handleSelectCategory}
-          />
-        );
-      })}
+      {expandedParentId !== null && (
+        <Pressable
+          style={styles.backButton}
+          onPress={() => {
+            onSelectCategory(null);
+            setExpandedParentId(null);
+          }}
+        >
+          <MaterialCommunityIcons name="arrow-left" size={18} color={colors.primary} />
+          <Text style={styles.backText}>Назад</Text>
+        </Pressable>
+      )}
+      {expandedParentId !== null
+        ? expandedParent?.subcategories?.map((category) => {
+            const isSelected = selectedCategory === category.id;
+            return (
+              <CategoryItem
+                key={category.id}
+                category={category}
+                isSelected={isSelected}
+                onPress={handleSelectCategory}
+              />
+            );
+          })
+        : categories.map((category) => {
+            const isSelected = selectedCategory === category.id;
+            return (
+              <CategoryItem
+                key={category.id}
+                category={category}
+                isSelected={isSelected}
+                onPress={handleSelectCategory}
+              />
+            );
+          })}
     </View>
   );
 };
@@ -44,25 +84,17 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 12,
   },
-  categoryItem: {
-    width: '30%',
+  backButton: {
+    flexDirection: 'row',
     alignItems: 'center',
-    padding: 12,
-    backgroundColor: colors.surface,
-    borderRadius: 12,
-    borderWidth: 2,
-    borderColor: 'transparent',
+    gap: 6,
+    width: '100%',
+    paddingVertical: 8,
+    paddingHorizontal: 4,
   },
-  categoryItemSelected: {
-    borderColor: colors.primary,
-  },
-  categoryName: {
-    fontSize: 12,
-    color: colors.textSecondary,
-    textAlign: 'center',
-  },
-  categoryNameSelected: {
-    color: colors.textPrimary,
-    fontWeight: '600',
+  backText: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: colors.primary,
   },
 });

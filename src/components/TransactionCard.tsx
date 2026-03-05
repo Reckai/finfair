@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Transaction } from '../types';
-import { resolveIconName, getCategoryById } from '../constants/categories';
+import { getCategoryById } from '../constants/categories';
 import { colors } from '../constants/colors';
 import { formatCurrency, formatRelativeTime } from '../utils/formatters';
 import { useAppStore } from '../store/useAppStore';
@@ -16,7 +17,7 @@ export const TransactionCard: React.FC<TransactionCardProps> = React.memo(functi
 }) {
   const storeCategories = useAppStore((s) => s.categories);
   const category = transaction.category || getCategoryById(transaction.categoryId, storeCategories);
-  const iconName = category ? resolveIconName(category.iconName) : 'help-circle';
+  const iconName = category?.iconName || 'help-circle';
 
   const iconContainerDynamicStyle = useMemo(
     () => [styles.iconContainer, { backgroundColor: (category?.color || colors.textMuted) + '20' }],
@@ -26,8 +27,8 @@ export const TransactionCard: React.FC<TransactionCardProps> = React.memo(functi
   return (
     <View style={styles.container}>
       <View style={iconContainerDynamicStyle}>
-        <Ionicons
-          name={iconName as keyof typeof Ionicons.glyphMap}
+        <MaterialCommunityIcons
+          name={iconName as keyof typeof MaterialCommunityIcons.glyphMap}
           size={24}
           color={category?.color || colors.textMuted}
         />

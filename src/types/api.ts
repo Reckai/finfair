@@ -1,9 +1,14 @@
+export type BudgetType = 'NEED' | 'WANT' | 'SAVING';
+
 export interface ApiCategory {
   id: number;
   name: string;
   iconName: string;
   color: string;
   isSystem: boolean;
+  parentId?: number | null;
+  budgetType?: BudgetType;
+  subcategories?: ApiCategory[];
 }
 
 export interface ApiTransaction {

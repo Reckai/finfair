@@ -3,7 +3,7 @@ import { View, Text, StyleSheet } from 'react-native';
 import { PieChart } from 'react-native-gifted-charts';
 import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
-import { resolveIconName, getCategoryById } from '../constants/categories';
+import { getCategoryById } from '../constants/categories';
 import { formatCurrency } from '../utils/formatters';
 import { CategorySpend } from '../utils/categoryCalculator';
 import { useAppStore } from '../store/useAppStore';
@@ -23,9 +23,8 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
   categoryBreakdown,
 }) => {
   const storeCategories = useAppStore((s) => s.categories);
-
   const chartData = categoryBreakdown.map((item) => {
-    const category = getCategoryById(item.categoryId, storeCategories);
+    const category = getCategoryById(item.parentId, storeCategories);
     return {
       value: item.amount,
       color: category?.color || colors.categoryOther,
@@ -96,14 +95,12 @@ export const TrueSpendCard: React.FC<TrueSpendCardProps> = ({
       {categoryBreakdown.length > 0 && (
         <View style={styles.categoriesGrid}>
           {categoryBreakdown.map((item) => {
-            const category = getCategoryById(item.categoryId, storeCategories);
+            const category = getCategoryById(item.parentId, storeCategories);
             if (!category) return null;
-            const iconName = resolveIconName(category.iconName);
-
             return (
               <TrueSpendCardCategoryCard
                 key={item.categoryId}
-                iconName={iconName}
+                iconName={category.iconName}
                 color={category.color}
                 amount={item.amount}
               />

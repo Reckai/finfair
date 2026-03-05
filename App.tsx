@@ -25,7 +25,9 @@ export default function App() {
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        try { getDatabase(); } catch {}
+        try {
+          getDatabase();
+        } catch {}
         const authenticated = await authService.isAuthenticated();
         if (authenticated) {
           const user = await authService.getCurrentUser();
@@ -38,7 +40,7 @@ export default function App() {
           const pairRes = await pairsApi.me();
 
           if (pairRes.success && pairRes.data) {
-            setPairId(pairRes.data.pair ?? null);
+            setPairId(pairRes.data.pair?.id ?? null);
           }
           const categories = await categoriesApi.getAll();
           if (categories.length > 0) {

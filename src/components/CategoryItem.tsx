@@ -1,9 +1,8 @@
 import React, { useMemo } from 'react';
 import { Category } from '../types';
 import { Pressable, StyleSheet, View, Text } from 'react-native';
-import { resolveIconName } from '../constants/categories';
 import { colors } from '../constants/colors';
-import { Ionicons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
 export interface CategoryItemProps {
   category: Category;
@@ -12,7 +11,6 @@ export interface CategoryItemProps {
 }
 
 export const CategoryItem = ({ category, isSelected, onPress }: CategoryItemProps) => {
-  const iconName = resolveIconName(category.iconName);
   const iconContainerDynamicStyle = useMemo(
     () => [
       styles.iconContainer,
@@ -27,8 +25,8 @@ export const CategoryItem = ({ category, isSelected, onPress }: CategoryItemProp
       onPress={() => onPress(category.id)}
     >
       <View style={iconContainerDynamicStyle}>
-        <Ionicons
-          name={iconName as keyof typeof Ionicons.glyphMap}
+        <MaterialCommunityIcons
+          name={category.iconName as keyof typeof MaterialCommunityIcons.glyphMap}
           size={24}
           color={isSelected ? '#FFFFFF' : category.color}
         />

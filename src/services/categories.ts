@@ -4,6 +4,7 @@ import { api } from './api';
 export const categoriesApi = {
   async getAll(): Promise<Category[]> {
     const response = await api.get<{ categories: ApiCategory[] }>('/categories');
+
     if (response.success && response.data) {
       return response.data.categories.map((category) => ({
         id: category.id,
@@ -11,6 +12,9 @@ export const categoriesApi = {
         isSystem: category.isSystem,
         color: category.color,
         iconName: category.iconName,
+        parentId: category.parentId ?? undefined,
+        budgetType: category.budgetType,
+        subcategories: category.subcategories,
       }));
     }
     return [];
