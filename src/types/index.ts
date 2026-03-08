@@ -7,6 +7,9 @@ export type {
   ApiSettlement,
   CreateSettlementPayload,
   ApiBalanceResponse,
+  ApiIncome,
+  ApiIncomeCategory,
+  CreateIncomePayload,
 } from './api';
 
 // Pair types
@@ -75,6 +78,29 @@ export interface Settlement {
   _pendingOutBoxId?: string;
 }
 
+// Income Category types
+export interface IncomeCategory {
+  id: number;
+  name: string;
+  iconName: string;
+  sortOrder: number;
+  color: string;
+  isSystem: boolean;
+}
+
+// Income types
+export interface Income {
+  id: string;
+  amount: number;
+  incomeCategoryId: number;
+  description?: string;
+  source: string;
+  userId: string;
+  createdAt: string;
+  category?: IncomeCategory;
+  _pendingOutBoxId?: string;
+}
+
 // Balance state
 export interface BalanceState {
   netBalance: number;
@@ -94,6 +120,7 @@ export interface ApiResponse<T> {
 export type RootStackParamList = {
   Auth: { token?: string };
   Main: undefined;
+  Analytics: undefined;
 };
 
 export type MainTabParamList = {

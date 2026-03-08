@@ -13,57 +13,94 @@ import {
 
 import { colors } from '../constants/colors';
 import { CategoryGrid } from '../components/CategoryGrid';
+import { IncomeCategoryGrid } from '../components/IncomeCategoryGrid';
 import { SplitModeToggle } from '../components/OwnerToggle';
 import { MainTabParamList, SplitMode } from '../types';
 import { useAppStore } from '../store/useAppStore';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useCreateTransaction } from '../hooks/useCreateTransaction';
+import { useCreateIncome } from '../hooks/useCreateIncome';
 
 type Props = BottomTabScreenProps<MainTabParamList, 'AddTransaction'>;
+type EntryMode = 'expense' | 'income';
 
 export const AddTransactionScreen: React.FC<Props> = () => {
+  const [mode, setMode] = useState<EntryMode>('expense');
   const [amount, setAmount] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<number | null>(null);
   const [description, setDescription] = useState('');
   const [splitMode, setSplitMode] = useState<SplitMode>('HALF');
   const [isFocused, setIsFocused] = useState(false);
-  const { mutate: createTransaction, isPending: isSubmitting } = useCreateTransaction();
+  const { mutate: createTransaction, isPending: isSubmittingExpense } = useCreateTransaction();
+  const { mutate: createIncome, isPending: isSubmittingIncome } = useCreateIncome();
+  const isSubmitting = isSubmittingExpense || isSubmittingIncome;
   const partnerName = useAppStore((s) => s.settings.partnerName);
   const pairId = useAppStore((s) => s.pairId);
   const scrollRef = useRef<ScrollView>(null);
+
   const handleScrollUp = () => {
     scrollRef.current?.scrollTo({
       y: 0,
       animated: true,
     });
   };
+
+  const handleModeChange = (newMode: EntryMode) => {
+    if (newMode !== mode) {
+      setMode(newMode);
+      setSelectedCategory(null);
+    }
+  };
+
   const handleSubmit = async () => {
     if (!amount || !selectedCategory || isSubmitting) {
       return;
     }
 
-    createTransaction(
-      {
-        amount: parseFloat(amount),
-        categoryId: selectedCategory,
-        splitMode,
-        description: description || undefined,
-        pairId: pairId || undefined,
-      },
-      {
-        onSuccess: () => {
-          setAmount('');
-          setSelectedCategory(null);
-          setDescription('');
-          setSplitMode('HALF');
-          setIsFocused(false);
-          handleScrollUp();
+    if (mode === 'expense') {
+      createTransaction(
+        {
+          amount: parseFloat(amount),
+          categoryId: selectedCategory,
+          splitMode,
+          description: description || undefined,
+          pairId: pairId || undefined,
         },
-        onError: () => {
-          Alert.alert('Ошибка', 'Не удалось создать транзакцию');
+        {
+          onSuccess: () => {
+            setAmount('');
+            setSelectedCategory(null);
+            setDescription('');
+            setSplitMode('HALF');
+            setIsFocused(false);
+            handleScrollUp();
+          },
+          onError: () => {
+            Alert.alert('Ошибка', 'Не удалось создать транзакцию');
+          },
         },
-      },
-    );
+      );
+    } else {
+      createIncome(
+        {
+          amount: parseFloat(amount),
+          incomeCategoryId: selectedCategory,
+          description: description || undefined,
+        },
+        {
+          onSuccess: () => {
+            setAmount('');
+            setSelectedCategory(null);
+            setDescription('');
+            setIsFocused(false);
+            handleScrollUp();
+          },
+          onError: () => {
+            Alert.alert('Ошибка', 'Не удалось добавить доход');
+          },
+        },
+      );
+    }
   };
 
   return (
@@ -72,6 +109,29 @@ export const AddTransactionScreen: React.FC<Props> = () => {
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
     >
       <ScrollView ref={scrollRef} contentContainerStyle={styles.content}>
+        <View style={styles.modeToggleContainer}>
+          <Pressable
+            style={[styles.modeToggleButton, mode === 'expense' && styles.modeToggleButtonActive]}
+            onPress={() => handleModeChange('expense')}
+          >
+            <Text
+              style={[styles.modeToggleText, mode === 'expense' && styles.modeToggleTextActive]}
+            >
+              Расход
+            </Text>
+          </Pressable>
+          <Pressable
+            style={[styles.modeToggleButton, mode === 'income' && styles.modeToggleButtonActive]}
+            onPress={() => handleModeChange('income')}
+          >
+            <Text
+              style={[styles.modeToggleText, mode === 'income' && styles.modeToggleTextActive]}
+            >
+              Доход
+            </Text>
+          </Pressable>
+        </View>
+
         <View style={styles.amountContainer}>
           <Text style={styles.currencySymbol}>₴</Text>
 
@@ -94,17 +154,26 @@ export const AddTransactionScreen: React.FC<Props> = () => {
           </View>
         </View>
 
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>За кого?</Text>
-          <SplitModeToggle value={splitMode} onChange={setSplitMode} partnerName={partnerName} />
-        </View>
+        {mode === 'expense' && (
+          <View style={styles.section}>
+            <Text style={styles.sectionTitle}>За кого?</Text>
+            <SplitModeToggle value={splitMode} onChange={setSplitMode} partnerName={partnerName} />
+          </View>
+        )}
 
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Категория</Text>
-          <CategoryGrid
-            selectedCategory={selectedCategory}
-            onSelectCategory={setSelectedCategory}
-          />
+          {mode === 'expense' ? (
+            <CategoryGrid
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
+          ) : (
+            <IncomeCategoryGrid
+              selectedCategory={selectedCategory}
+              onSelectCategory={setSelectedCategory}
+            />
+          )}
         </View>
 
         <View style={styles.section}>
@@ -141,6 +210,30 @@ const styles = StyleSheet.create({
   },
   content: {
     padding: 16,
+  },
+  modeToggleContainer: {
+    flexDirection: 'row',
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 4,
+    marginBottom: 24,
+  },
+  modeToggleButton: {
+    flex: 1,
+    paddingVertical: 10,
+    alignItems: 'center',
+    borderRadius: 10,
+  },
+  modeToggleButtonActive: {
+    backgroundColor: colors.primary,
+  },
+  modeToggleText: {
+    fontSize: 15,
+    fontWeight: '600',
+    color: colors.textMuted,
+  },
+  modeToggleTextActive: {
+    color: '#FFFFFF',
   },
   amountContainer: {
     flexDirection: 'row',

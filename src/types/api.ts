@@ -43,6 +43,32 @@ export interface ApiChartData {
   totalTrueSpend: number;
 }
 
+export interface ApiIncomeCategory {
+  id: number;
+  name: string;
+  iconName: string;
+  sortOrder: number;
+  color: string;
+  isSystem: boolean;
+}
+
+export interface ApiIncome {
+  id: string;
+  amount: string;
+  incomeCategoryId: number;
+  description: string | null;
+  source: string;
+  userId: string;
+  createdAt: string;
+  category?: ApiIncomeCategory;
+}
+
+export interface CreateIncomePayload {
+  amount: number;
+  incomeCategoryId: number;
+  description?: string;
+}
+
 export interface ApiSettlement {
   id: string;
   amount: string;

@@ -1,4 +1,4 @@
-export type EntityType = 'transaction' | 'settlement';
+export type EntityType = 'transaction' | 'settlement' | 'income';
 
 export type OutboxAction = 'create' | 'update' | 'delete';
 
@@ -18,6 +18,7 @@ export const CACHE_KEYS = {
   TRANSACTIONS_PAIR: 'transactions_pair',
   SETTLEMENTS: 'settlements',
   DASHBOARD_STATS: 'dashboard_stats',
+  INCOMES: 'incomes',
 };
 export type CacheKey = (typeof CACHE_KEYS)[keyof typeof CACHE_KEYS];
 

@@ -1,14 +1,17 @@
 import React, { useState, useCallback } from 'react';
-import { View, Text, StyleSheet, ScrollView, RefreshControl } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, RefreshControl, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { Ionicons } from '@expo/vector-icons';
 import { colors } from '../constants/colors';
 import { TransactionCard } from '../components/TransactionCard';
 import { TrueSpendCard } from '../components/TrueSpendCard';
 import { NetBalanceCard } from '../components/NetBalanceCard';
 import { SettleUpModal } from '../components/SettleUpModal';
 import { apiToTransaction } from '../utils/transactionAdapter';
-import { MainTabParamList } from '../types';
+import { MainTabParamList, RootStackParamList } from '../types';
 import { useDashboardStats } from '../hooks/useDashboardStats';
 import { useCreateSettlement } from '../hooks/useCreateSettlement';
 import { useManualSync } from '../hooks/useManualSync';
@@ -16,6 +19,7 @@ type Props = BottomTabScreenProps<MainTabParamList, 'Dashboard'>;
 
 export const DashboardScreen: React.FC<Props> = () => {
   const insets = useSafeAreaInsets();
+  const rootNavigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [settleModalVisible, setSettleModalVisible] = useState(false);
   const { data: stats } = useDashboardStats();
   const { sync, isSyncing } = useManualSync();
@@ -73,6 +77,17 @@ export const DashboardScreen: React.FC<Props> = () => {
           />
         </View>
 
+        <View style={styles.section}>
+          <Pressable
+            style={styles.analyticsButton}
+            onPress={() => rootNavigation.navigate('Analytics')}
+          >
+            <Ionicons name="analytics-outline" size={22} color={colors.primary} />
+            <Text style={styles.analyticsButtonText}>Розширена аналітика</Text>
+            <Ionicons name="chevron-forward" size={18} color={colors.textMuted} />
+          </Pressable>
+        </View>
+
         <View style={styles.transactionsSection}>
           <Text style={styles.sectionTitle}>Останні операції</Text>
           {recentTransactions
@@ -120,5 +135,19 @@ const styles = StyleSheet.create({
   },
   transactionsSection: {
     marginBottom: 24,
+  },
+  analyticsButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: colors.surface,
+    borderRadius: 12,
+    padding: 16,
+    gap: 12,
+  },
+  analyticsButtonText: {
+    flex: 1,
+    fontSize: 16,
+    fontWeight: '600',
+    color: colors.textPrimary,
   },
 });

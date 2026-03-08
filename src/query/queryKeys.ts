@@ -9,4 +9,10 @@ export const queryKeys = {
   dashboard: {
     stats: ['dashboard', 'stats'] as const,
   },
+  incomes: {
+    all: ['incomes'] as const,
+  },
+  incomeCategories: {
+    all: ['income-categories'] as const,
+  },
 } as const;

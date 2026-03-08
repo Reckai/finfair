@@ -8,6 +8,7 @@ import { DashboardScreen } from '../screens/DashboardScreen';
 import { AddTransactionScreen } from '../screens/AddTransactionScreen';
 import { HistoryScreen } from '../screens/HistoryScreen';
 import { SettingsScreen } from '../screens/SettingsScreen';
+import { AnalyticsScreen } from '../screens/AnalyticsScreen';
 import { RootStackParamList, MainTabParamList } from '../types';
 import { colors } from '../constants/colors';
 import { useAppStore } from '../store/useAppStore';
@@ -120,7 +121,19 @@ export const AppNavigator: React.FC = () => {
         }}
       >
         {isAuthenticated ? (
-          <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
+          <>
+            <Stack.Screen name="Main" component={MainTabs} options={{ headerShown: false }} />
+            <Stack.Screen
+              name="Analytics"
+              component={AnalyticsScreen}
+              options={{
+                headerShown: true,
+                headerTitle: 'Аналітика',
+                headerStyle: { backgroundColor: colors.background },
+                headerTintColor: colors.textPrimary,
+              }}
+            />
+          </>
         ) : (
           <Stack.Screen name="Auth" component={AuthScreen} />
         )}
