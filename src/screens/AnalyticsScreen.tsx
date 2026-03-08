@@ -27,9 +27,8 @@ export const AnalyticsScreen: React.FC = () => {
   const expenses = useExpensesByCategory(period);
   const sankey = useSankeyData(period);
   const trend = useTrend(6);
-
-  const isLoading =
-    summary.isLoading || expenses.isLoading || sankey.isLoading || trend.isLoading;
+  console.log(summary.data, expenses.data, sankey.data);
+  const isLoading = summary.isLoading || expenses.isLoading || sankey.isLoading || trend.isLoading;
 
   return (
     <View style={styles.container}>
@@ -45,14 +44,10 @@ export const AnalyticsScreen: React.FC = () => {
           showsVerticalScrollIndicator={false}
         >
           <Text style={styles.sectionTitle}>Потік грошей</Text>
-          <SankeyChart
-            data={sankey.data ?? { nodes: [], links: [] }}
-          />
+          <SankeyChart data={sankey.data ?? { nodes: [], links: [] }} />
 
           <Text style={styles.sectionTitle}>Правило 50/30/20</Text>
-          <BudgetRule503020
-            rule503020={summary.data?.rule503020 ?? null}
-          />
+          <BudgetRule503020 rule503020={summary.data?.rule503020 ?? null} />
 
           <Text style={styles.sectionTitle}>Витрати за категоріями</Text>
           <ExpenseCategoryList

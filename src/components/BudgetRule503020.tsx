@@ -15,7 +15,7 @@ interface BudgetRule503020Props {
   rule503020: AnalyticsSummary['rule503020'] | null | undefined;
 }
 
-const BUCKETS: Array<{ key: 'need' | 'want' | 'saving'; label: string }> = [
+const BUCKETS: { key: 'need' | 'want' | 'saving'; label: string }[] = [
   { key: 'need', label: 'Необхідне 50%' },
   { key: 'want', label: 'Бажане 30%' },
   { key: 'saving', label: 'Накопичення 20%' },
@@ -38,12 +38,7 @@ function BucketRow({ label, data }: { label: string; data: BucketData }) {
         </Text>
       </View>
       <View style={styles.barBackground}>
-        <View
-          style={[
-            styles.barFill,
-            { width: `${ratio * 100}%`, backgroundColor: barColor },
-          ]}
-        />
+        <View style={[styles.barFill, { width: `${ratio * 100}%`, backgroundColor: barColor }]} />
       </View>
     </View>
   );

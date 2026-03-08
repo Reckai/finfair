@@ -52,18 +52,24 @@ export const HistoryScreen: React.FC<Props> = () => {
   const renderItem = useCallback(
     ({ item }: { item: Transaction }) => {
       const label = getSplitLabel(item);
+      const ownerLabel = item.userId === currentUserId ? 'Моє' : 'Партнера';
       return (
-        <View style={label ? styles.debtTransactionWrapper : undefined}>
+        <View style={styles.debtTransactionWrapper}>
           <TransactionCard transaction={item} />
-          {label && (
-            <View style={styles.debtIndicator}>
-              <Text style={styles.debtIndicatorText}>{label}</Text>
+          <View style={styles.badgeRow}>
+            {label && (
+              <View style={styles.debtIndicator}>
+                <Text style={styles.debtIndicatorText}>{label}</Text>
+              </View>
+            )}
+            <View style={styles.ownerIndicator}>
+              <Text style={styles.ownerIndicatorText}>{ownerLabel}</Text>
             </View>
-          )}
+          </View>
         </View>
       );
     },
-    [getSplitLabel],
+    [getSplitLabel, currentUserId],
   );
 
   const renderEmpty = () => (
@@ -143,10 +149,25 @@ const styles = StyleSheet.create({
   debtTransactionWrapper: {
     position: 'relative',
   },
-  debtIndicator: {
+  badgeRow: {
     position: 'absolute',
     top: 8,
     right: 8,
+    flexDirection: 'row',
+    gap: 6,
+  },
+  ownerIndicator: {
+    backgroundColor: colors.surfaceSecondary,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    borderRadius: 6,
+  },
+  ownerIndicatorText: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: colors.textSecondary,
+  },
+  debtIndicator: {
     backgroundColor: colors.categoryEntertainment,
     paddingHorizontal: 8,
     paddingVertical: 4,

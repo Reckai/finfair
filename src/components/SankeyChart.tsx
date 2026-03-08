@@ -84,14 +84,14 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
       color: getNodeColor(n),
     }));
 
-    const links: Array<{ source: number; target: number; value: number; sourceColor: string }> =
+    const links: { source: string; target: string; value: number; sourceColor: string }[] =
       data.links
         .filter((l) => nodeIdToIndex.has(l.source) && nodeIdToIndex.has(l.target))
         .map((l) => {
           const sourceIdx = nodeIdToIndex.get(l.source)!;
           return {
-            source: sourceIdx,
-            target: nodeIdToIndex.get(l.target)!,
+            source: l.source,
+            target: l.target,
             value: l.value,
             sourceColor: nodes[sourceIdx].color,
           };
@@ -135,7 +135,7 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
               fill="none"
               stroke={sourceNode.color}
               strokeOpacity={0.3}
-              strokeWidth={Math.max((link.width ?? 1), 1)}
+              strokeWidth={Math.max(link.width ?? 1, 1)}
             />
           );
         })}
@@ -149,6 +149,21 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
           const labelX = isLeftSide ? x0 - 4 : x1 + 4;
           const textAnchor = isLeftSide ? 'end' : 'start';
           const value = node.value ?? 0;
+          const spent =
+            node.type === 'bucket'
+              ? (node.sourceLinks ?? []).reduce(
+                  (sum: number, sl: SLink) => {
+                    const targetNode = sl.target as SNode;
+                    if (targetNode.type === 'remainder') return sum;
+                    return sum + (sl.value ?? 0);
+                  },
+                  0,
+                )
+              : 0;
+          const labelText =
+            node.type === 'bucket'
+              ? `${node.label} ${formatAmount(value)} (${formatAmount(spent)})`
+              : `${node.label} ${formatAmount(value)}`;
 
           return (
             <React.Fragment key={`node-${i}`}>
@@ -169,7 +184,7 @@ export const SankeyChart: React.FC<SankeyChartProps> = ({
                   fontSize={10}
                   fill={colors.textPrimary}
                 >
-                  {node.label} {formatAmount(value)}
+                  {labelText}
                 </SvgText>
               )}
             </React.Fragment>
