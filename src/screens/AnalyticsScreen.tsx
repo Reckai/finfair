@@ -27,7 +27,6 @@ export const AnalyticsScreen: React.FC = () => {
   const expenses = useExpensesByCategory(period);
   const sankey = useSankeyData(period);
   const trend = useTrend(6);
-  console.log(summary.data, expenses.data, sankey.data);
   const isLoading = summary.isLoading || expenses.isLoading || sankey.isLoading || trend.isLoading;
 
   return (
